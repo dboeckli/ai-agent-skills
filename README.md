@@ -47,19 +47,31 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 
 ## Installation für Claude Code
 
-Das Repository einmalig klonen und die gewünschten Skills per Symlink einbinden. Durch den Symlink werden Updates via `git pull` sofort wirksam, ohne erneutes Kopieren.
+Das Installationsskript klont das Repository und verlinkt alle Skills per Symlink nach `~/.claude/skills/`. Durch den Symlink werden Updates via `git pull` sofort wirksam, ohne erneutes Kopieren.
 
 ```bash
-# Repository klonen (einmalig)
-git clone https://github.com/[dein-user]/ai-agent-skills.git ~/projects/ai-agent-skills
+# Einmalig installieren
+bash <(curl -fsSL https://raw.githubusercontent.com/[dein-user]/ai-agent-skills/main/install.sh) \
+  https://github.com/[dein-user]/ai-agent-skills.git
+```
 
-# Einzelne Skills verlinken
-ln -s ~/projects/ai-agent-skills/.claude/skills/cc-best-practices    ~/.claude/skills/cc-best-practices
-ln -s ~/projects/ai-agent-skills/.claude/skills/skill-best-practices  ~/.claude/skills/skill-best-practices
-ln -s ~/projects/ai-agent-skills/.claude/skills/project-references    ~/.claude/skills/project-references
+Oder nach einem manuellen Clone vom Repository-Verzeichnis aus:
+
+```bash
+bash install.sh
+```
+
+Zum Aktualisieren dasselbe Skript erneut ausführen — es erkennt das vorhandene Repository und führt stattdessen `git pull` aus:
+
+```bash
+bash ~/projects/ai-agent-skills/install.sh
 ```
 
 Die verlinkten Skills stehen Claude Code anschliessend automatisch zur Verfügung und können per `/skill-name` aufgerufen werden.
+
+> **Env-Variablen** (optional):
+> - `INSTALL_DIR` — Clone-Zielverzeichnis (Standard: `~/projects/ai-agent-skills`)
+> - `SKILLS_TARGET_DIR` — Symlink-Zielverzeichnis (Standard: `~/.claude/skills`)
 
 ---
 
@@ -84,16 +96,3 @@ Du darfst die Skills in diesem Repository nutzen, modifizieren und weiterverwend
 
 Die Nutzung, Modifikation und Weiterverwendung durch Dritte ist **unabhängig vom eingesetzten AI System** ausdrücklich erlaubt. Die Skills stehen allen zur Verfügung, die ein AI System betreiben, das das SKILL.md Format verarbeiten kann.
 
----
-
-## Beitragen
-
-Du hast einen neuen Skill entwickelt, der hier nicht fehlen sollte? Wir freuen uns über Beiträge!
-
-**So trägst du bei:**
-1. Fork erstellen und einen neuen Branch anlegen (`feature/dein-skill-name`)
-2. Deinen Skill als neues Verzeichnis mit SKILL.md hinzufügen
-3. README.md aktualisieren (Tabelle der enthaltenen Skills ergänzen)
-4. Pull Request mit kurzer Beschreibung des Skills einreichen
-
-Wir prüfen jeden Beitrag und integrieren gut dokumentierte Skills so schnell wie möglich.
