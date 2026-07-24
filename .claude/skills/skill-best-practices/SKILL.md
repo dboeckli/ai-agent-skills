@@ -1,12 +1,13 @@
 ---
-
 name: skill-best-practices
 description: Guide for creating, structuring, and improving Claude skills (SKILL.md). Use when building a new skill, reviewing an existing skill, writing SKILL.md frontmatter, defining trigger conditions, troubleshooting skill problems (not triggering, over-triggering, instructions not followed), or planning skill distribution. Do NOT use for general Claude Code configuration or hook setup.
 metadata:
 author: dboeckli
 version: 1.0.0
 source: https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
--------------------------------------------------------------------------------------------------
+---
+
+---
 
 # Skill Best Practices
 
@@ -17,6 +18,7 @@ Reference: https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-
 ### Step 1: Identify your use case category
 
 Determine which type of skill you're building:
+
 - **Document & Asset Creation** — consistent output (docs, designs, code)
 - **Workflow Automation** — multi-step processes with consistent methodology
 - **MCP Enhancement** — workflow guidance on top of MCP tool access
@@ -32,6 +34,7 @@ Define 2–3 concrete use cases before writing anything (see Planning section be
 ### Step 3: Write the description — this is the most critical part
 
 The description controls when Claude loads your skill. It must include:
+
 - **WHAT** the skill does
 - **WHEN** to use it (specific trigger phrases)
 - Optional: negative triggers ("Do NOT use for...")
@@ -63,6 +66,7 @@ Iterate on the description until triggering is reliable (see Testing approach).
 User says: "Help me create a skill that plans sprints in Linear"
 
 Actions:
+
 1. Identify category: Workflow Automation + MCP Enhancement
 2. Define use case: trigger = "plan sprint", "create sprint tasks"; steps = fetch Linear status → analyze velocity → create tasks
 3. Create folder `linear-sprint-planner/SKILL.md`
@@ -77,6 +81,7 @@ Result: Functional skill that auto-triggers on sprint planning requests and exec
 User says: "Review my SKILL.md and suggest improvements"
 
 Actions:
+
 1. Read the SKILL.md frontmatter — check name (kebab-case?), description (WHAT + WHEN? under 1024 chars? trigger phrases present?)
 2. Check body — is it under 5,000 words? Are instructions specific and actionable? Is there a Troubleshooting section? Examples?
 3. Simulate triggering — would the description cause Claude to load this skill for the right queries?
@@ -89,6 +94,7 @@ Result: Prioritized list of improvements with specific fixes for each issue.
 User says: "My skill never loads automatically, I always have to invoke it manually"
 
 Actions:
+
 1. Read the description field — is it too generic? ("Helps with projects" won't work)
 2. Check for missing trigger phrases — does it include words users would actually say?
 3. Ask Claude: "When would you use the [skill name] skill?" — Claude quotes the description back; gaps become obvious
@@ -101,6 +107,7 @@ Result: Updated description with concrete triggers; skill auto-loads on relevant
 ## What is a skill?
 
 A skill is a folder containing:
+
 - `SKILL.md` (required): Instructions in Markdown with YAML frontmatter
 - `scripts/` (optional): Executable code (Python, Bash, etc.)
 - `references/` (optional): Documentation loaded as needed
@@ -109,7 +116,8 @@ A skill is a folder containing:
 ## Core design principles
 
 **Progressive Disclosure** — three levels:
-1. YAML frontmatter: always in system prompt; tells Claude *when* to load the skill
+
+1. YAML frontmatter: always in system prompt; tells Claude _when_ to load the skill
 2. SKILL.md body: loaded when relevant; full instructions
 3. Linked files in `references/`: loaded on demand
 
@@ -133,6 +141,7 @@ Result: <expected outcome>
 ```
 
 Ask yourself:
+
 - What does the user want to accomplish?
 - What multi-step workflow is required?
 - Which tools are needed (built-in or MCP)?
@@ -140,8 +149,8 @@ Ask yourself:
 
 ### Three skill categories
 
-|           Category            |                      When to use                      |                   Key techniques                    |
-|-------------------------------|-------------------------------------------------------|-----------------------------------------------------|
+| Category                      | When to use                                           | Key techniques                                      |
+| ----------------------------- | ----------------------------------------------------- | --------------------------------------------------- |
 | **Document & Asset Creation** | Consistent, high-quality output (docs, designs, code) | Style guides, templates, quality checklists         |
 | **Workflow Automation**       | Multi-step processes with consistent methodology      | Step-by-step with validation gates, iterative loops |
 | **MCP Enhancement**           | Workflow guidance on top of MCP tool access           | Sequential MCP calls, embedded domain expertise     |
@@ -168,10 +177,12 @@ description: What it does. Use when user asks to [specific phrases].
 ```
 
 **`name`** (required):
+
 - kebab-case, no spaces or capitals
 - Must match folder name
 
 **`description`** (required):
+
 - MUST include BOTH: what the skill does AND when to use it (trigger conditions)
 - Under 1024 characters
 - No XML tags (`<` or `>`)
@@ -190,6 +201,7 @@ metadata:
 ```
 
 **Security restrictions — forbidden in frontmatter:**
+
 - XML angle brackets (`< >`)
 - Names containing "claude" or "anthropic" (reserved)
 
@@ -238,6 +250,7 @@ Recommended structure:
 ## Instructions
 
 ### Step 1: [First Major Step]
+
 Clear explanation of what happens.
 
 ### Step 2: ...
@@ -245,14 +258,17 @@ Clear explanation of what happens.
 ## Examples
 
 ### Example 1: [Common scenario]
+
 User says: "..."
 Actions:
+
 1. ...
-Result: ...
+   Result: ...
 
 ## Troubleshooting
 
 ### Error: [Common error message]
+
 **Cause:** Why it happens
 **Solution:** How to fix
 ```
@@ -325,8 +341,8 @@ Compare token count, tool calls, and back-and-forth messages with vs. without th
 
 ### Skill won't upload
 
-|           Error           |           Cause            |                Fix                 |
-|---------------------------|----------------------------|------------------------------------|
+| Error                     | Cause                      | Fix                                |
+| ------------------------- | -------------------------- | ---------------------------------- |
 | "Could not find SKILL.md" | Wrong filename             | Rename exactly to `SKILL.md`       |
 | "Invalid frontmatter"     | YAML formatting            | Add `---` delimiters, close quotes |
 | "Invalid skill name"      | Spaces or capitals in name | Use kebab-case                     |
@@ -374,11 +390,13 @@ For detailed examples and implementation templates for each pattern, consult `re
 ## Quick checklist
 
 **Before you start:**
+
 - [ ] Identified 2–3 concrete use cases
 - [ ] Tools identified (built-in or MCP)
 - [ ] Planned folder structure
 
 **During development:**
+
 - [ ] Folder named in kebab-case
 - [ ] `SKILL.md` exists (exact spelling, case-sensitive)
 - [ ] YAML frontmatter has `---` delimiters
@@ -391,12 +409,14 @@ For detailed examples and implementation templates for each pattern, consult `re
 - [ ] References clearly linked
 
 **Before upload:**
+
 - [ ] Triggers on obvious tasks
 - [ ] Triggers on paraphrased requests
 - [ ] Does NOT trigger on unrelated topics
 - [ ] Functional tests pass
 
 **After upload:**
+
 - [ ] Test in real conversations
 - [ ] Monitor for under/over-triggering
 - [ ] Iterate on description and instructions

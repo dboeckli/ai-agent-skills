@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install ai-agent-skills: clone or pull the repository, then symlink all skills
-# into ~/.claude/skills/ so Claude Code picks them up automatically.
+# into ~/.claude/skills/ and the statusline script into ~/.claude/statusline.sh.
 #
 # Usage: bash install.sh [repo-url]
 #   repo-url  GitHub URL to clone from. Optional when run from within the repo.
@@ -78,6 +78,24 @@ for skill_dir in "$INSTALL_DIR/.claude/skills"/*/; do
     fi
 done
 
+# ── Symlink statusline ───────────────────────────────────────────────────────
+
+STATUSLINE_SOURCE="$INSTALL_DIR/scripts/statusline.sh"
+STATUSLINE_TARGET="$HOME/.claude/statusline.sh"
+
+if [[ -L "$STATUSLINE_TARGET" ]]; then
+    echo "SKIP  statusline.sh — symlink already exists"
+    ((skipped++)) || true
+elif [[ -e "$STATUSLINE_TARGET" ]]; then
+    echo "WARN  statusline.sh — $STATUSLINE_TARGET exists and is not a symlink, skipping" >&2
+    ((skipped++)) || true
+else
+    chmod +x "$STATUSLINE_SOURCE"
+    ln -s "$STATUSLINE_SOURCE" "$STATUSLINE_TARGET"
+    echo "LINK  statusline.sh → $STATUSLINE_TARGET"
+    ((linked++)) || true
+fi
+
 echo ""
-echo "Done. $linked skill(s) linked, $skipped skipped."
+echo "Done. $linked item(s) linked, $skipped skipped."
 echo "Skills are available in Claude Code via /skill-name."

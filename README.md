@@ -21,11 +21,13 @@ Die Skills in diesem Repository sind bewusst so gestaltet, dass sie **keine Clau
 - **Shell-Befehle** – Universelle Unix/Linux-Kommandos
 
 Jedes AI System, das:
+
 - Markdown-basierte Kontextdateien einlesen kann
 - Shell-Befehle ausführen und deren Ausgabe verarbeiten kann
 - Dateien erstellen, lesen und modifizieren kann
 
 kann diese Skills grundsätzlich nutzen. Dazu gehören unter anderem:
+
 - Claude (Anthropic)
 - GPT-basierte Agenten mit Tool-Nutzung (OpenAI)
 - Gemini (Google)
@@ -37,11 +39,11 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 
 ## Enthaltene Skills
 
-| Skill | Beschreibung |
-|-------|-------------|
-| `cc-best-practices` | Anleitung zur effektiven Nutzung von Claude Code: Kontextmanagement, Explore-Plan-Implement-Workflow, Prompting-Techniken und häufige Fehlermuster. |
-| `skill-best-practices` | Leitfaden zum Erstellen, Strukturieren und Verbessern von SKILL.md Dateien: Frontmatter, Trigger-Beschreibungen, Testen und Troubleshooting. |
-| `project-references` | Konventionen und Implementierungsmuster aus eigenen GitHub-Repositories nachschlagen, die lokal unter `~/projects/referenzen/` ausgecheckt sind. |
+| Skill                  | Beschreibung                                                                                                                                        |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cc-best-practices`    | Anleitung zur effektiven Nutzung von Claude Code: Kontextmanagement, Explore-Plan-Implement-Workflow, Prompting-Techniken und häufige Fehlermuster. |
+| `skill-best-practices` | Leitfaden zum Erstellen, Strukturieren und Verbessern von SKILL.md Dateien: Frontmatter, Trigger-Beschreibungen, Testen und Troubleshooting.        |
+| `project-references`   | Konventionen und Implementierungsmuster aus eigenen GitHub-Repositories nachschlagen, die lokal unter `~/projects/referenzen/` ausgecheckt sind.    |
 
 ---
 
@@ -70,6 +72,7 @@ bash ~/projects/ai-agent-skills/install.sh
 Die verlinkten Skills stehen Claude Code anschliessend automatisch zur Verfügung und können per `/skill-name` aufgerufen werden.
 
 > **Env-Variablen** (optional):
+>
 > - `INSTALL_DIR` — Clone-Zielverzeichnis (Standard: `~/projects/ai-agent-skills`)
 > - `SKILLS_TARGET_DIR` — Symlink-Zielverzeichnis (Standard: `~/.claude/skills`)
 
@@ -78,12 +81,15 @@ Die verlinkten Skills stehen Claude Code anschliessend automatisch zur Verfügun
 ## Nutzung mit anderen AI Systemen
 
 ### Als Kontextdatei hochladen
+
 Lade die gewünschte SKILL.md Datei direkt in den Chat hoch. Das AI System kann den Inhalt als Kontext für die Aufgabenbearbeitung nutzen.
 
 ### In Systemprompt einfügen
+
 Kopiere den Inhalt einer SKILL.md Datei (oder ausgewählte Abschnitte) in den Systemprompt deines AI Systems, um die definierten Anweisungen und Werkzeuge zu aktivieren.
 
 ### Einbindung in Custom-GPTs oder Agenten-Frameworks
+
 Verweise in deiner Konfiguration auf die SKILL.md Datei(en) aus diesem Repository. Die strukturierten Metadaten und Anweisungen können von den meisten modernen Agenten-Frameworks direkt interpretiert werden.
 
 ---
@@ -95,4 +101,3 @@ Dieses Repository ist unter der **MIT-Lizenz** veröffentlicht.
 Du darfst die Skills in diesem Repository nutzen, modifizieren und weiterverwenden – sowohl für private als auch für kommerzielle Projekte. Eine Namensnennung ist nicht erforderlich, wird aber geschätzt.
 
 Die Nutzung, Modifikation und Weiterverwendung durch Dritte ist **unabhängig vom eingesetzten AI System** ausdrücklich erlaubt. Die Skills stehen allen zur Verfügung, die ein AI System betreiben, das das SKILL.md Format verarbeiten kann.
-

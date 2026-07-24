@@ -36,11 +36,11 @@ cp -r .claude/skills/. ~/.claude/skills/
 
 ## Included Skills
 
-| Skill | Trigger |
-|-------|---------|
-| `cc-best-practices` | Questions about effective Claude Code usage, context management, prompting, plan mode |
-| `skill-best-practices` | Creating, reviewing, or troubleshooting SKILL.md files |
-| `project-references` | Looking up conventions from sibling GitHub repos under `~/projects/referenzen/` |
+| Skill                  | Trigger                                                                               |
+| ---------------------- | ------------------------------------------------------------------------------------- |
+| `cc-best-practices`    | Questions about effective Claude Code usage, context management, prompting, plan mode |
+| `skill-best-practices` | Creating, reviewing, or troubleshooting SKILL.md files                                |
+| `project-references`   | Looking up conventions from sibling GitHub repos under `~/projects/referenzen/`       |
 
 ## Conventions When Adding a New Skill
 

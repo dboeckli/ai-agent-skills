@@ -53,4 +53,3 @@ Always tell the user which project and file a pattern came from:
 
 > Pattern adopted from `your-service` →
 > `~/projects/referenzen/your-service/helm-charts/Chart.yaml` (line 4)
-

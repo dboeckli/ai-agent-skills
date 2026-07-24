@@ -9,7 +9,9 @@ Use this skill whenever the user asks how to get the most out of Claude Code,
 how to write better prompts, how to manage context, when to use plan mode,
 how to automate tasks, or when they describe a frustrating pattern like Claude
 repeating mistakes or losing track of instructions.
----------------------------------------------------
+---
+
+---
 
 # Claude Code Best Practices
 
@@ -55,17 +57,19 @@ Let subagents explore unfamiliar code or review your implementation — they run
 User says: "I keep getting flaky results when I ask Claude to implement something"
 
 Actions:
+
 1. Add a verification step to the prompt: "write a validateEmail function — run the existing test suite after implementing, show me the output"
 2. If no tests exist: "write the function AND write tests for it, run them, show results"
 3. Set a Stop hook to block turn completion until tests pass
 
-Result: Claude iterates until tests pass instead of stopping when the code *looks* done.
+Result: Claude iterates until tests pass instead of stopping when the code _looks_ done.
 
 ### Example 2: Tackling a complex, multi-file change
 
 User says: "How should I approach a big refactor across 10 files?"
 
 Actions:
+
 1. Enter `/plan` mode — Claude explores without making changes
 2. Ask: "read the affected files and write a step-by-step implementation plan"
 3. Edit the plan directly with `Ctrl+G` if needed
@@ -79,6 +83,7 @@ Result: Structured refactor with a reviewable plan, no context-thrashing from mi
 User says: "I've corrected Claude 3 times on the same issue and it keeps doing it wrong"
 
 Actions:
+
 1. Run `/clear` — start a fresh context
 2. Identify what was missing from the original prompt (missing constraint, missing example, ambiguous scope)
 3. Write a new initial prompt that includes the constraint explicitly: "IMPORTANT: do not use mocks in these tests — use real database connections"
@@ -92,7 +97,7 @@ Result: Clean session with a better-specified prompt outperforms a long session 
 
 ## 1. Give Claude a way to verify its work
 
-Claude stops when the work *looks* done. Without a runnable check, you become
+Claude stops when the work _looks_ done. Without a runnable check, you become
 the verification loop. Provide something that returns a pass/fail signal Claude
 can read: a test suite, a build exit code, a linter, a script that diffs output.
 
@@ -106,10 +111,10 @@ than just asserting success.
 
 **Example upgrade:**
 
-> Before: *"implement a function that validates email addresses"*
+> Before: _"implement a function that validates email addresses"_
 > After: *"write a validateEmail function. test cases: user@example.com → true,
 >
->> invalid → false. run the tests after implementing"*
+> > invalid → false. run the tests after implementing"*
 
 ---
 
@@ -133,14 +138,15 @@ multiple files or you are unfamiliar with the code.
 
 Claude can infer intent but cannot read your mind.
 
-|       Strategy       |                      Vague                      |                                                       Specific                                                        |
-|----------------------|-------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
-| Scope the task       | *"add tests for foo.py"*                        | *"write a test for foo.py covering the edge case where the user is logged out. avoid mocks."*                         |
-| Point to sources     | *"why does ExecutionFactory have a weird API?"* | *"look through ExecutionFactory's git history and summarize how its API evolved"*                                     |
-| Reference patterns   | *"add a calendar widget"*                       | *"look at HotDogWidget.php as a pattern reference and follow it to implement a calendar widget"*                      |
-| Describe the symptom | *"fix the login bug"*                           | *"users report login fails after session timeout. check src/auth/ token refresh. write a failing test, then fix it."* |
+| Strategy             | Vague                                           | Specific                                                                                                              |
+| -------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Scope the task       | _"add tests for foo.py"_                        | _"write a test for foo.py covering the edge case where the user is logged out. avoid mocks."_                         |
+| Point to sources     | _"why does ExecutionFactory have a weird API?"_ | _"look through ExecutionFactory's git history and summarize how its API evolved"_                                     |
+| Reference patterns   | _"add a calendar widget"_                       | _"look at HotDogWidget.php as a pattern reference and follow it to implement a calendar widget"_                      |
+| Describe the symptom | _"fix the login bug"_                           | _"users report login fails after session timeout. check src/auth/ token refresh. write a failing test, then fix it."_ |
 
 **Rich context techniques:**
+
 - Use `@filename` to reference files directly.
 - Paste screenshots or drag images into the prompt.
 - Pipe data: `cat error.log | claude`
@@ -155,6 +161,7 @@ human-readable** — bloated CLAUDE.md files cause Claude to ignore actual
 instructions.
 
 **Include:**
+
 - Bash commands Claude cannot guess (e.g., build/test commands)
 - Code style rules that differ from language defaults
 - Testing instructions and preferred test runners
@@ -164,12 +171,13 @@ instructions.
 - Common gotchas or non-obvious behaviors
 
 **Exclude:**
+
 - Anything Claude can figure out by reading the code
 - Standard language conventions Claude already knows
 - Detailed API documentation (link instead)
 - Self-evident practices like "write clean code"
 
-For each line: *"Would removing this cause Claude to make mistakes?"* If not, cut it.
+For each line: _"Would removing this cause Claude to make mistakes?"_ If not, cut it.
 
 Use `/context` to confirm Claude loaded the file. Use `@path/to/file` imports
 in CLAUDE.md to pull in other files selectively.
@@ -193,7 +201,7 @@ Customize compaction in CLAUDE.md:
 
 > *"When compacting, always preserve the full list of modified files and any
 >
->> test commands"*
+> > test commands"*
 
 ---
 
@@ -237,9 +245,10 @@ done
 
 **Parallel sessions** — run multiple Claude sessions with git worktrees so
 edits don't collide. Writer/Reviewer pattern:
+
 - Session A implements a feature.
 - Session B reviews the diff in a fresh context (no bias toward the code it
-just wrote).
+  just wrote).
 
 **Auto mode** — uninterrupted execution with background safety checks:
 
