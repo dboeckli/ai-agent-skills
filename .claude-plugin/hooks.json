@@ -9,6 +9,17 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/.claude/hooks/format.sh\"",
+            "statusMessage": "Formatting files..."
+          }
+        ]
+      }
     ]
   }
 }
