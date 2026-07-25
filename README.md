@@ -50,9 +50,17 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 
 ## Installation für Claude Code
 
-### Option 1: npm global (Plugin)
+### Option 1: npm global — Standard (empfohlen)
 
-Das Repository enthält ein `.claude-plugin/plugin.json` Manifest. Claude Code erkennt npm-global installierte Plugins automatisch und lädt alle enthaltenen Skills:
+Dies ist der offizielle Claude Code Plugin-Mechanismus. Claude Code erkennt npm-global installierte Plugins automatisch via `.claude-plugin/plugin.json` und lädt alle Skills. Ein SessionStart-Hook installiert `statusline.sh` automatisch. Kein zusätzliches Tool nötig.
+
+npm blockiert Git-URL-Installs standardmässig. Einmalig freischalten:
+
+```bash
+npm config set allow-git all
+```
+
+Dann installieren:
 
 ```bash
 npm install -g https://github.com/dboeckli/ai-agent-skills.git
@@ -64,7 +72,9 @@ Zum Aktualisieren:
 npm update -g ai-agent-skills
 ```
 
-### Option 2: skills CLI (projekt- oder global)
+### Option 2: skills CLI — Alternative
+
+Die `skills` CLI ist ein Third-Party Tool (nicht Teil von Claude Code) das Skills aus verschiedenen Quellen selektiv installieren und verwalten kann. Nützlich wenn man einzelne Skills aus mehreren Repos kombinieren möchte.
 
 ```bash
 # Global installieren
@@ -76,6 +86,10 @@ npx skills add https://github.com/dboeckli/ai-agent-skills
 # Aktualisieren
 npx skills update ai-agent-skills
 ```
+
+> **Installationsmethode:** Bei der Abfrage _Installation method_ empfiehlt sich **Copy to all agents** — so sind die Skills unabhängig von Pfaden und funktionieren in allen Agenten (Claude Code, Amp, Cline usw.).
+>
+> **WSL-Hinweis:** In der interaktiven Skill-Auswahl **Space** drücken zum Auswählen/Abwählen eines Skills, dann **Enter** zum Bestätigen. Enter alleine wählt nichts aus.
 
 ---
 

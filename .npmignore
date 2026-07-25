@@ -1,0 +1,11 @@
+# Development and CI files not needed in the npm package
+.github/
+.gitignore
+CLAUDE.md
+WSL_Claude_Code_Setup.md
+*.iml
+target/
+
+# OS
+.DS_Store
+Thumbs.db
