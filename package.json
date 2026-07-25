@@ -1,6 +1,9 @@
 {
-  "name": "ai-agent-skills",
+  "name": "@dboeckli/ai-agent-skills",
   "version": "1.0.0",
+  "scripts": {
+    "postinstall": "bash scripts/install-skills.sh"
+  },
   "description": "Reusable AI agent skills in the SKILL.md format for Claude Code",
   "repository": {
     "type": "git",

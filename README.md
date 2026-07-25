@@ -76,11 +76,9 @@ npx skills update ai-agent-skills
 >   -o ~/.claude/statusline.sh && chmod +x ~/.claude/statusline.sh
 > ```
 
-### Option 2: npm global — Claude Code Plugin-Mechanismus (experimentell)
+### Option 2: npm global
 
-Nutzt das offizielle Claude Code Plugin-System via `.claude-plugin/plugin.json`. Claude Code soll das Plugin automatisch erkennen, Skills laden und einen SessionStart-Hook ausführen, der `statusline.sh` installiert.
-
-> **Hinweis:** Diese Methode hat in der Praxis nicht zuverlässig funktioniert — Skills und `statusline.sh` wurden nicht automatisch in `~/.claude/` installiert. Option 1 wird empfohlen.
+Installiert Skills und `statusline.sh` via `postinstall`-Script automatisch nach `~/.claude/`. Skills werden als Symlinks eingebunden — Updates via `npm update` werden sofort wirksam.
 
 npm blockiert Git-URL-Installs standardmässig. Einmalig freischalten:
 
@@ -88,16 +86,16 @@ npm blockiert Git-URL-Installs standardmässig. Einmalig freischalten:
 npm config set allow-git all
 ```
 
-Dann installieren:
+Installieren:
 
 ```bash
-npm install -g https://github.com/dboeckli/ai-agent-skills.git
+npm install -g https://github.com/dboeckli/ai-agent-skills.git#master
 ```
 
-Zum Aktualisieren:
+Aktualisieren:
 
 ```bash
-npm update -g ai-agent-skills
+npm update -g @dboeckli/ai-agent-skills
 ```
 
 ---
