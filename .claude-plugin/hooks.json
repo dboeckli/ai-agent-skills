@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cp -f \"${CLAUDE_PLUGIN_ROOT}/scripts/statusline.sh\" \"${HOME}/.claude/statusline.sh\" && chmod +x \"${HOME}/.claude/statusline.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}

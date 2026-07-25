@@ -1,0 +1,19 @@
+{
+  "name": "ai-agent-skills",
+  "version": "1.0.0",
+  "description": "Reusable AI agent skills in the SKILL.md format for Claude Code",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dboeckli/ai-agent-skills.git"
+  },
+  "author": "dboeckli",
+  "license": "MIT",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "skills",
+    "ai-agent",
+    "camel",
+    "spring-boot"
+  ]
+}

@@ -26,13 +26,19 @@ Each skill lives in `.claude/skills/<skill-name>/` and follows this layout:
 
 ### Installing Skills for Claude Code
 
-```bash
-# Copy a skill to the user-level skills directory
-cp -r .claude/skills/<skill-name> ~/.claude/skills/
+**Via npm (Plugin — recommended):**
 
-# Or copy all skills at once
-cp -r .claude/skills/. ~/.claude/skills/
+```bash
+npm install -g https://github.com/dboeckli/ai-agent-skills.git
 ```
+
+**Via skills CLI:**
+
+```bash
+npx skills add -g https://github.com/dboeckli/ai-agent-skills
+```
+
+Claude Code detects the `.claude-plugin/plugin.json` manifest automatically and loads all skills.
 
 ## Included Skills
 
