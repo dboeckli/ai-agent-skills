@@ -41,6 +41,7 @@ cp -r .claude/skills/. ~/.claude/skills/
 | `cc-best-practices`    | Questions about effective Claude Code usage, context management, prompting, plan mode |
 | `skill-best-practices` | Creating, reviewing, or troubleshooting SKILL.md files                                |
 | `project-references`   | Looking up conventions from sibling GitHub repos under `~/projects/referenzen/`       |
+| `camel-matrix`         | Generate or update the Apache Camel Spring Boot compatibility matrix                  |
 
 ## Conventions When Adding a New Skill
 

@@ -1,9 +1,9 @@
 ---
 name: skill-best-practices
-description: Guide for creating, structuring, and improving Claude skills (SKILL.md). Use when building a new skill, reviewing an existing skill, writing SKILL.md frontmatter, defining trigger conditions, troubleshooting skill problems (not triggering, over-triggering, instructions not followed), or planning skill distribution. Do NOT use for general Claude Code configuration or hook setup.
+description: Guide for creating, structuring, and improving Claude skills (SKILL.md). Use when building a new skill, reviewing an existing skill, writing SKILL.md frontmatter, defining trigger conditions, troubleshooting skill problems (not triggering, over-triggering, instructions not followed), or planning skill distribution. When working on any skill in this repository: also load the cc-best-practices skill, and always update both CLAUDE.md and README.md skill tables after any skill change. Do NOT use for general Claude Code configuration or hook setup.
 metadata:
 author: dboeckli
-version: 1.0.0
+version: 1.1.0
 source: https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
 ---
 
@@ -46,12 +46,23 @@ See "Writing effective descriptions" for good/bad examples.
 Follow the recommended template: `## Instructions` → numbered steps → `## Examples` → `## Troubleshooting`.
 Be specific and actionable. Move detailed docs to `references/` and link to them.
 
-### Step 5: Test triggering and functional behavior
+### Step 5: Update CLAUDE.md and README.md
+
+After creating or modifying any skill in this repository, always update the skill tables in both files:
+
+- `CLAUDE.md` — skill table under "Included Skills" (Trigger column: one-line description of when it fires)
+- `README.md` — skill table under "Enthaltene Skills" (Beschreibung column: German one-liner)
+
+Both files must stay in sync. This step is mandatory and must not be skipped.
+
+Also invoke the `cc-best-practices` skill when working on skills in this repository to ensure context and session management follow project standards.
+
+### Step 6: Test triggering and functional behavior
 
 Run 10–20 test queries. Target: skill triggers on ~90% of relevant queries and never on unrelated topics.
 Iterate on the description until triggering is reliable (see Testing approach).
 
-### Step 6: Iterate based on signals
+### Step 7: Iterate based on signals
 
 - Undertriggering → add more trigger phrases to description
 - Overtriggering → add negative triggers, narrow scope
@@ -407,6 +418,12 @@ For detailed examples and implementation templates for each pattern, consult `re
 - [ ] Error handling included
 - [ ] Examples provided
 - [ ] References clearly linked
+
+**Repository sync (mandatory for this repo):**
+
+- [ ] `CLAUDE.md` skill table updated
+- [ ] `README.md` skill table updated
+- [ ] `cc-best-practices` skill was loaded during this session
 
 **Before upload:**
 
