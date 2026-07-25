@@ -18,14 +18,11 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: "24"
-          registry-url: "https://npm.pkg.github.com"
-          scope: "@dboeckli"
 
-      - name: Install dependencies
-        run: npm install --ignore-scripts
-
-      - name: Build API documentation
-        run: npm run build
+      - name: Test npm install
+        run: |
+          npm install -g --ignore-scripts .
+          bash "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.sh"
 
       - name: Validate SKILL.md frontmatter
         run: bash .claude/skills/skill-best-practices/scripts/validate-skills.sh
