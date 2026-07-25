@@ -50,9 +50,37 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 
 ## Installation für Claude Code
 
-### Option 1: npm global — Standard (empfohlen)
+### Option 1: skills CLI — Empfohlen
 
-Dies ist der offizielle Claude Code Plugin-Mechanismus. Claude Code erkennt npm-global installierte Plugins automatisch via `.claude-plugin/plugin.json` und lädt alle Skills. Ein SessionStart-Hook installiert `statusline.sh` automatisch. Kein zusätzliches Tool nötig.
+Die `skills` CLI kopiert Skills direkt in die Agenten-Verzeichnisse und funktioniert mit Claude Code, Amp, Cline und weiteren Agenten. Nützlich wenn man Skills aus mehreren Repos kombinieren möchte.
+
+```bash
+# Global installieren
+npx skills add -g https://github.com/dboeckli/ai-agent-skills
+
+# Nur im aktuellen Projekt installieren
+npx skills add https://github.com/dboeckli/ai-agent-skills
+
+# Aktualisieren
+npx skills update ai-agent-skills
+```
+
+> **Installationsmethode:** Bei der Abfrage _Installation method_ empfiehlt sich **Copy to all agents** — so sind die Skills unabhängig von Pfaden und funktionieren in allen Agenten (Claude Code, Amp, Cline usw.).
+>
+> **WSL-Hinweis:** In der interaktiven Skill-Auswahl **Space** drücken zum Auswählen/Abwählen eines Skills, dann **Enter** zum Bestätigen. Enter alleine wählt nichts aus.
+>
+> **Statusline:** Die `statusline.sh` wird von der `skills` CLI nicht automatisch installiert. Nach der Skill-Installation einmalig ausführen:
+>
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/dboeckli/ai-agent-skills/master/scripts/statusline.sh \
+>   -o ~/.claude/statusline.sh && chmod +x ~/.claude/statusline.sh
+> ```
+
+### Option 2: npm global — Claude Code Plugin-Mechanismus (experimentell)
+
+Nutzt das offizielle Claude Code Plugin-System via `.claude-plugin/plugin.json`. Claude Code soll das Plugin automatisch erkennen, Skills laden und einen SessionStart-Hook ausführen, der `statusline.sh` installiert.
+
+> **Hinweis:** Diese Methode hat in der Praxis nicht zuverlässig funktioniert — Skills und `statusline.sh` wurden nicht automatisch in `~/.claude/` installiert. Option 1 wird empfohlen.
 
 npm blockiert Git-URL-Installs standardmässig. Einmalig freischalten:
 
@@ -71,25 +99,6 @@ Zum Aktualisieren:
 ```bash
 npm update -g ai-agent-skills
 ```
-
-### Option 2: skills CLI — Alternative
-
-Die `skills` CLI ist ein Third-Party Tool (nicht Teil von Claude Code) das Skills aus verschiedenen Quellen selektiv installieren und verwalten kann. Nützlich wenn man einzelne Skills aus mehreren Repos kombinieren möchte.
-
-```bash
-# Global installieren
-npx skills add -g https://github.com/dboeckli/ai-agent-skills
-
-# Nur im aktuellen Projekt installieren
-npx skills add https://github.com/dboeckli/ai-agent-skills
-
-# Aktualisieren
-npx skills update ai-agent-skills
-```
-
-> **Installationsmethode:** Bei der Abfrage _Installation method_ empfiehlt sich **Copy to all agents** — so sind die Skills unabhängig von Pfaden und funktionieren in allen Agenten (Claude Code, Amp, Cline usw.).
->
-> **WSL-Hinweis:** In der interaktiven Skill-Auswahl **Space** drücken zum Auswählen/Abwählen eines Skills, dann **Enter** zum Bestätigen. Enter alleine wählt nichts aus.
 
 ---
 
