@@ -30,7 +30,7 @@ jobs:
   publish:
     needs: validate
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    if: github.event_name == 'push'
     permissions:
       packages: write
       contents: read
@@ -44,7 +44,18 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
           scope: "@dboeckli"
 
+      - name: Set version with git hash
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          BASE_VERSION=$(node -p "require('./package.json').version")
+          npm version "${BASE_VERSION}-${SHORT_SHA}" --no-git-tag-version
+
       - name: Publish to GitHub Packages
-        run: npm publish
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/master" ]; then
+            npm publish --tag latest
+          else
+            npm publish --tag dev
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
