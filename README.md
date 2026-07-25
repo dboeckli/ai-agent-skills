@@ -50,32 +50,32 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 
 ## Installation für Claude Code
 
-Das Installationsskript klont das Repository und verlinkt alle Skills per Symlink nach `~/.claude/skills/`. Durch den Symlink werden Updates via `git pull` sofort wirksam, ohne erneutes Kopieren.
+### Option 1: npm global (Plugin)
+
+Das Repository enthält ein `.claude-plugin/plugin.json` Manifest. Claude Code erkennt npm-global installierte Plugins automatisch und lädt alle enthaltenen Skills:
 
 ```bash
-# Einmalig installieren
-bash <(curl -fsSL https://raw.githubusercontent.com/[dein-user]/ai-agent-skills/main/install.sh) \
-  https://github.com/[dein-user]/ai-agent-skills.git
+npm install -g https://github.com/dboeckli/ai-agent-skills.git
 ```
 
-Oder nach einem manuellen Clone vom Repository-Verzeichnis aus:
+Zum Aktualisieren:
 
 ```bash
-bash install.sh
+npm update -g ai-agent-skills
 ```
 
-Zum Aktualisieren dasselbe Skript erneut ausführen — es erkennt das vorhandene Repository und führt stattdessen `git pull` aus:
+### Option 2: skills CLI (projekt- oder global)
 
 ```bash
-bash ~/projects/ai-agent-skills/install.sh
+# Global installieren
+npx skills add -g https://github.com/dboeckli/ai-agent-skills
+
+# Nur im aktuellen Projekt installieren
+npx skills add https://github.com/dboeckli/ai-agent-skills
+
+# Aktualisieren
+npx skills update ai-agent-skills
 ```
-
-Die verlinkten Skills stehen Claude Code anschliessend automatisch zur Verfügung und können per `/skill-name` aufgerufen werden.
-
-> **Env-Variablen** (optional):
->
-> - `INSTALL_DIR` — Clone-Zielverzeichnis (Standard: `~/projects/ai-agent-skills`)
-> - `SKILLS_TARGET_DIR` — Symlink-Zielverzeichnis (Standard: `~/.claude/skills`)
 
 ---
 

@@ -5,7 +5,7 @@ description: Generates an AsciiDoc compatibility matrix for Apache Camel Spring 
 
 # Camel Spring Boot Compatibility Matrix
 
-Run `~/.claude/scripts/camel-springboot-matrix.sh` to generate `target/camel-springboot-matrix.adoc` relative to the current project directory. The `target/` directory is created automatically if it does not exist.
+Run `scripts/camel-springboot-matrix.sh` (bundled in this skill) to generate `target/camel-springboot-matrix.adoc` relative to the current project directory. The `target/` directory is created automatically if it does not exist.
 
 ## Arguments
 
@@ -19,7 +19,7 @@ The user may provide an optional version range: `$ARGUMENTS`
 1. Run the script. If no version range is given by the user, default to `4.14.0` as minimum and omit the max argument (so the script fetches up to the latest available version):
 
 ```bash
-bash ~/.claude/scripts/camel-springboot-matrix.sh ${ARGUMENTS:-4.14.0}
+bash "${CLAUDE_PLUGIN_ROOT}/scripts/camel-springboot-matrix.sh" ${ARGUMENTS:-4.14.0}
 ```
 
 2. After completion, report:

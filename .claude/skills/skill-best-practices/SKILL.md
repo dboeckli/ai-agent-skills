@@ -2,9 +2,9 @@
 name: skill-best-practices
 description: Guide for creating, structuring, and improving Claude skills (SKILL.md). Use when building a new skill, reviewing an existing skill, writing SKILL.md frontmatter, defining trigger conditions, troubleshooting skill problems (not triggering, over-triggering, instructions not followed), or planning skill distribution. When working on any skill in this repository: also load the cc-best-practices skill, and always update both CLAUDE.md and README.md skill tables after any skill change. Do NOT use for general Claude Code configuration or hook setup.
 metadata:
-author: dboeckli
-version: 1.1.0
-source: https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
+  author: dboeckli
+  version: 1.1.0
+  source: https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
 ---
 
 ---
@@ -57,7 +57,26 @@ Both files must stay in sync. This step is mandatory and must not be skipped.
 
 Also invoke the `cc-best-practices` skill when working on skills in this repository to ensure context and session management follow project standards.
 
-### Step 6: Test triggering and functional behavior
+### Step 6: Validate YAML and skills CLI compatibility
+
+Run the validation script from the repository root before testing or committing:
+
+```bash
+bash .claude/skills/skill-best-practices/scripts/validate-skills.sh
+```
+
+Fix any `FAIL` lines before continuing. Common issues:
+
+- `description` uses block scalar (`>` or `|`) → replace with a quoted single-line string
+- Sub-keys under a parent mapping key not indented → add two-space indent
+
+After pushing, also run the remote check to confirm `npx skills add --list` finds all skills:
+
+```bash
+bash .claude/skills/skill-best-practices/scripts/validate-skills.sh --remote
+```
+
+### Step 7: Test triggering and functional behavior
 
 Run 10–20 test queries. Target: skill triggers on ~90% of relevant queries and never on unrelated topics.
 Iterate on the description until triggering is reliable (see Testing approach).
@@ -424,6 +443,8 @@ For detailed examples and implementation templates for each pattern, consult `re
 - [ ] `CLAUDE.md` skill table updated
 - [ ] `README.md` skill table updated
 - [ ] `cc-best-practices` skill was loaded during this session
+- [ ] `validate-skills.sh` run — no `FAIL` lines
+- [ ] After push: `validate-skills.sh --remote` run — all skills found by `npx skills`
 
 **Before upload:**
 

@@ -1,16 +1,6 @@
 ---
-
 name: project-references
-description: >
-Look up conventions, patterns, and concrete implementations from your own
-GitHub repositories checked out locally under ~/projects/referenzen/.
-Use this skill whenever there is uncertainty about how something is done
-in your codebase family — e.g. Helm chart structure, Kubernetes manifests,
-framework configuration patterns, Docker Compose conventions, CI/CD pipeline
-setup, or any other recurring architectural decision. Invoke it
-proactively before guessing at a convention; always cite the source
-project and path when a pattern is adopted. Also use when the user asks
-to check out, update, or search reference repositories.
+description: "Look up conventions, patterns, and concrete implementations from your own GitHub repositories checked out locally under ~/projects/referenzen/. Use this skill whenever there is uncertainty about how something is done in your codebase family — e.g. Helm chart structure, Kubernetes manifests, framework configuration patterns, Docker Compose conventions, CI/CD pipeline setup, or any other recurring architectural decision. Invoke it proactively before guessing at a convention; always cite the source project and path when a pattern is adopted. Also use when the user asks to check out, update, or search reference repositories."
 ---
 
 ---
