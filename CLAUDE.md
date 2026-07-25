@@ -26,23 +26,8 @@ Each skill lives in `.claude/skills/<skill-name>/` and follows this layout:
 
 ### Installing Skills for Claude Code
 
-**Via npm — standard Claude Code approach (recommended):**
-Uses the official Claude Code Plugin system. Claude Code auto-detects the `.claude-plugin/plugin.json` manifest, loads all skills, and runs the SessionStart hook to install `statusline.sh`. No extra tools needed.
-
-npm blocks git URL installs by default — enable once:
-
-```bash
-npm config set allow-git all
-```
-
-Then install:
-
-```bash
-npm install -g https://github.com/dboeckli/ai-agent-skills.git
-```
-
-**Via skills CLI — alternative (third-party tool):**
-Useful for selectively combining skills from multiple repositories. Not part of Claude Code itself.
+**Via skills CLI — recommended:**
+Copies skills directly into agent directories. Works with Claude Code, Amp, Cline, and others. Useful for combining skills from multiple repositories.
 
 ```bash
 npx skills add -g https://github.com/dboeckli/ai-agent-skills
@@ -51,6 +36,13 @@ npx skills add -g https://github.com/dboeckli/ai-agent-skills
 > **Installation method:** When prompted, choose **Copy to all agents** — skills work independently of paths across all agents (Claude Code, Amp, Cline, etc.).
 >
 > **WSL note:** In the interactive skill selection prompt, press **Space** to select/deselect a skill, then **Enter** to confirm. Enter alone does not select.
+>
+> **Statusline:** The `skills` CLI does not install `statusline.sh`. After skill installation, run once:
+>
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/dboeckli/ai-agent-skills/master/scripts/statusline.sh \
+>   -o ~/.claude/statusline.sh && chmod +x ~/.claude/statusline.sh
+> ```
 
 ## Included Skills
 

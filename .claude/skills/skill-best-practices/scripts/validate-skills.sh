@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # Validate SKILL.md frontmatter for npx skills CLI compatibility.
-# Run from anywhere within the repository.
 #
 # Usage:
-#   bash scripts/validate-skills.sh           # local YAML check only
-#   bash scripts/validate-skills.sh --remote  # local check + npx skills add --list (requires pushed changes)
+#   bash validate-skills.sh           # local YAML check only
+#   bash validate-skills.sh --remote  # local check + npx skills add --list
 #
 # Exit codes: 0 = all ok, 1 = errors found
 
@@ -17,7 +16,6 @@ errors=0
 
 [[ "${1:-}" == "--remote" ]] && REMOTE=true
 
-# Extract YAML frontmatter between the first pair of --- delimiters
 frontmatter() { awk '/^---$/{n++; if(n==2)exit; next} n==1{print}' "$1"; }
 
 for skill_md in "$SKILLS_DIR"/*/SKILL.md; do
@@ -26,33 +24,35 @@ for skill_md in "$SKILLS_DIR"/*/SKILL.md; do
     fm="$(frontmatter "$skill_md")"
     fail=false
 
-    # 1. Block scalar in description (> or |) — skills CLI YAML parser rejects these
-    if echo "$fm" | grep -qE '^description:[[:space:]]*[>|][[:space:]]*$'; then
-        echo "FAIL  $skill — description uses block scalar (> or |); replace with a quoted single-line string"
+    output="$(printf '%s' "$fm" | python3 -c '
+import sys, yaml
+content = sys.stdin.read()
+try:
+    data = yaml.safe_load(content) or {}
+except yaml.YAMLError as e:
+    print(str(e).replace(chr(10), " "))
+    sys.exit(1)
+name = data.get("name", "")
+desc = str(data.get("description", ""))
+if not name:
+    print("missing required field: name")
+    sys.exit(1)
+if not desc:
+    print("missing required field: description")
+    sys.exit(1)
+if len(desc) > 1024:
+    print("WARN description is " + str(len(desc)) + " chars (limit: 1024)")
+' 2>&1)" || {
+        echo "FAIL  $skill — $output"
         fail=true
-    fi
-
-    # 2. Unindented sub-keys under a parent mapping key
-    #    e.g.  metadata:\nauthor: foo  must be  metadata:\n  author: foo
-    if echo "$fm" | awk '
-        /^[a-zA-Z_-]+:[[:space:]]*$/ { parent=1; next }
-        parent && /^[a-zA-Z_-]+:/ { print "unindented"; exit }
-        { parent=0 }
-    ' | grep -q unindented; then
-        echo "FAIL  $skill — sub-key not indented under parent mapping (causes YAML parse error)"
-        fail=true
-    fi
-
-    # 3. Description length
-    desc="$(echo "$fm" | awk '/^description:/{sub(/^description:[[:space:]]*/,""); gsub(/^"|"$/,""); print; exit}')"
-    if [[ ${#desc} -gt 1024 ]]; then
-        echo "WARN  $skill — description is ${#desc} chars (limit: 1024)"
-    fi
+        errors=$((errors + 1))
+    }
 
     if ! $fail; then
+        while IFS= read -r line; do
+            [[ "$line" == WARN* ]] && echo "WARN  $skill — ${line#WARN }"
+        done <<< "$output"
         echo "OK    $skill"
-    else
-        ((errors++)) || true
     fi
 done
 
