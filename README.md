@@ -50,55 +50,73 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 
 ## Installation für Claude Code
 
-### Option 1: skills CLI — Empfohlen
+### Option 1: npm global — Empfohlen
 
-Die `skills` CLI kopiert Skills direkt in die Agenten-Verzeichnisse und funktioniert mit Claude Code, Amp, Cline und weiteren Agenten. Nützlich wenn man Skills aus mehreren Repos kombinieren möchte.
+Installiert Skills, `statusline.sh` und den Formatter-Hook automatisch. Skills werden als Symlinks eingebunden — Reinstall genügt für Updates.
 
-```bash
-# Global installieren
-npx skills add -g https://github.com/dboeckli/ai-agent-skills
-
-# Nur im aktuellen Projekt installieren
-npx skills add https://github.com/dboeckli/ai-agent-skills
-
-# Aktualisieren
-npx skills update ai-agent-skills
-```
-
-> **Installationsmethode:** Bei der Abfrage _Installation method_ empfiehlt sich **Copy to all agents** — so sind die Skills unabhängig von Pfaden und funktionieren in allen Agenten (Claude Code, Amp, Cline usw.).
->
-> **WSL-Hinweis:** In der interaktiven Skill-Auswahl **Space** drücken zum Auswählen/Abwählen eines Skills, dann **Enter** zum Bestätigen. Enter alleine wählt nichts aus.
->
-> **Statusline:** Die `statusline.sh` wird von der `skills` CLI nicht automatisch installiert. Nach der Skill-Installation einmalig ausführen:
->
-> ```bash
-> curl -fsSL https://raw.githubusercontent.com/dboeckli/ai-agent-skills/master/scripts/statusline.sh \
->   -o ~/.claude/statusline.sh && chmod +x ~/.claude/statusline.sh
-> ```
-
-### Option 2: npm global
-
-Installiert Skills und `statusline.sh` via `postinstall`-Script automatisch nach `~/.claude/`. Skills werden als Symlinks eingebunden — Updates via `npm update` werden sofort wirksam.
-
-npm blockiert Git-URL-Installs standardmässig. Einmalig freischalten:
+Einmalig npm für Git-URL-Installs freischalten:
 
 ```bash
 npm config set allow-git all
 ```
 
-Installieren (mit manuellem Script-Aufruf, da npm Lifecycle-Scripts bei Git-URL-Installs blockiert):
+Installieren und Setup-Script ausführen:
 
 ```bash
 npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#master && \
   bash "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.sh"
 ```
 
-Aktualisieren:
+Installation prüfen:
+
+```bash
+tree ~/.claude/skills && ls ~/.claude/statusline.sh ~/.claude/settings.json
+```
+
+Erwartete Ausgabe:
+
+```
+~/.claude/skills
+├── camel-matrix -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.claude/skills/camel-matrix/
+├── cc-best-practices -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.claude/skills/cc-best-practices/
+├── project-references -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.claude/skills/project-references/
+└── skill-best-practices -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.claude/skills/skill-best-practices/
+
+~/.claude/statusline.sh
+~/.claude/settings.json
+```
+
+Ausserdem wird in `~/.claude/settings.json` ein Stop-Hook eingetragen, der nach jeder Session Dateien formatiert.
+
+Aktualisieren (gleicher Befehl):
 
 ```bash
 npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#master && \
   bash "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.sh"
 ```
+
+### Option 2: skills CLI — Alternative
+
+Nützlich um Skills aus mehreren Repos zu kombinieren. Installiert **nicht** `statusline.sh` und den Formatter-Hook.
+
+```bash
+# Global installieren
+npx skills add -g https://github.com/dboeckli/ai-agent-skills
+
+# Aktualisieren
+npx skills update ai-agent-skills
+```
+
+> **Installationsmethode:** Bei der Abfrage _Installation method_ **Copy to all agents** wählen.
+>
+> **WSL-Hinweis:** **Space** zum Auswählen, dann **Enter** zum Bestätigen.
+>
+> **Statusline manuell installieren:**
+>
+> ```bash
+> curl -fsSL https://raw.githubusercontent.com/dboeckli/ai-agent-skills/master/scripts/statusline.sh \
+>   -o ~/.claude/statusline.sh && chmod +x ~/.claude/statusline.sh
+> ```
 
 ---
 
