@@ -27,6 +27,9 @@ jobs:
       - name: Validate SKILL.md frontmatter
         run: bash .claude/skills/skill-best-practices/scripts/validate-skills.sh
 
+      - name: Validate CLAUDE.md
+        run: bash .claude/skills/cc-best-practices/scripts/validate-claude-md.sh
+
   publish:
     needs: validate
     runs-on: ubuntu-latest
