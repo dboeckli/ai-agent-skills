@@ -78,23 +78,39 @@ for skill_dir in "$INSTALL_DIR/.claude/skills"/*/; do
     fi
 done
 
-# ── Symlink statusline ───────────────────────────────────────────────────────
+# ── Symlink scripts ──────────────────────────────────────────────────────────
 
-STATUSLINE_SOURCE="$INSTALL_DIR/scripts/statusline.sh"
-STATUSLINE_TARGET="$HOME/.claude/statusline.sh"
+symlink_script() {
+    local source="$1" target="$2" label="$3"
+    if [[ ! -f "$source" ]]; then
+        echo "SKIP  $label — source not found in installed repo"
+        ((skipped++)) || true
+        return
+    fi
+    if [[ -L "$target" ]]; then
+        echo "SKIP  $label — symlink already exists"
+        ((skipped++)) || true
+    elif [[ -e "$target" ]]; then
+        echo "WARN  $label — $target exists and is not a symlink, skipping" >&2
+        ((skipped++)) || true
+    else
+        chmod +x "$source"
+        ln -s "$source" "$target"
+        echo "LINK  $label → $target"
+        ((linked++)) || true
+    fi
+}
 
-if [[ -L "$STATUSLINE_TARGET" ]]; then
-    echo "SKIP  statusline.sh — symlink already exists"
-    ((skipped++)) || true
-elif [[ -e "$STATUSLINE_TARGET" ]]; then
-    echo "WARN  statusline.sh — $STATUSLINE_TARGET exists and is not a symlink, skipping" >&2
-    ((skipped++)) || true
-else
-    chmod +x "$STATUSLINE_SOURCE"
-    ln -s "$STATUSLINE_SOURCE" "$STATUSLINE_TARGET"
-    echo "LINK  statusline.sh → $STATUSLINE_TARGET"
-    ((linked++)) || true
-fi
+symlink_script \
+    "$INSTALL_DIR/scripts/statusline.sh" \
+    "$HOME/.claude/statusline.sh" \
+    "statusline.sh"
+
+mkdir -p "$HOME/.claude/scripts"
+symlink_script \
+    "$INSTALL_DIR/scripts/camel-springboot-matrix.sh" \
+    "$HOME/.claude/scripts/camel-springboot-matrix.sh" \
+    "camel-springboot-matrix.sh"
 
 echo ""
 echo "Done. $linked item(s) linked, $skipped skipped."
