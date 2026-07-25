@@ -11,7 +11,9 @@ setup, or any other recurring architectural decision. Invoke it
 proactively before guessing at a convention; always cite the source
 project and path when a pattern is adopted. Also use when the user asks
 to check out, update, or search reference repositories.
--------------------------------------------------------
+---
+
+---
 
 # Project References
 
@@ -61,6 +63,7 @@ Run `scripts/sync-all.sh` only when the user says "sync all" or "update all refe
 User says: "How should I structure the Helm chart for this project?"
 
 Actions:
+
 1. Run `ls ~/projects/referenzen/` to see available repos
 2. Ask: "Which sibling project should I use as reference?" — user says `your-service`
 3. Run `find ~/projects/referenzen/your-service -name "Chart.yaml"` to locate it
@@ -74,6 +77,7 @@ Result: Helm chart consistent with sibling projects, traceable source cited.
 User says: "Clone my other-service project as a reference"
 
 Actions:
+
 1. Run `bash scripts/clone-or-update.sh owner/other-service`
 2. Stream output so user sees CLONE/PULL/SKIP progress
 3. Confirm with `ls ~/projects/referenzen/other-service/`
@@ -85,6 +89,7 @@ Result: Repo available locally for pattern lookups; no edits made.
 User says: "How do I configure the database pool like in the other projects?"
 
 Actions:
+
 1. `ls ~/projects/referenzen/` — pick a relevant sibling project
 2. `grep -rn "database.pool" ~/projects/referenzen/your-service/src/main/resources/`
 3. Read the relevant config section
@@ -194,4 +199,3 @@ all of them — scanning is expensive in context.
   and stop — do not stash, reset, or force.
 - Do not expose repository contents that contain secrets (`.env`, credential
   files) in the response — read and cite structure only.
-

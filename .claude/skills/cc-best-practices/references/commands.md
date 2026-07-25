@@ -4,8 +4,8 @@ Source: https://code.claude.com/docs/en/best-practices
 
 ## Key Commands
 
-|       Command       |                   Purpose                    |
-|---------------------|----------------------------------------------|
+| Command             | Purpose                                      |
+| ------------------- | -------------------------------------------- |
 | `/plan`             | Enter plan mode (explore/plan without edits) |
 | `/clear`            | Reset context window                         |
 | `/compact <hint>`   | Compact conversation with a focus hint       |
@@ -40,11 +40,10 @@ claude --permission-mode auto -p "fix all lint errors"
 
 ## Common Failure Patterns
 
-|           Pattern            |                   Symptom                    |                         Fix                          |
-|------------------------------|----------------------------------------------|------------------------------------------------------|
+| Pattern                      | Symptom                                      | Fix                                                  |
+| ---------------------------- | -------------------------------------------- | ---------------------------------------------------- |
 | **Kitchen-sink session**     | Context full of unrelated tasks              | `/clear` between unrelated tasks                     |
 | **Correcting over and over** | Same mistake after 2+ corrections            | `/clear`, write a better prompt                      |
 | **Over-specified CLAUDE.md** | Claude ignores rules buried in noise         | Prune ruthlessly; convert repetitive checks to hooks |
 | **Trust-then-verify gap**    | Plausible-looking code with edge-case holes  | Always provide tests or a verification script        |
 | **Infinite exploration**     | Claude reads hundreds of files, context full | Scope narrowly or use subagents                      |
-

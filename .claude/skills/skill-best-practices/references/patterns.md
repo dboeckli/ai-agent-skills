@@ -28,6 +28,7 @@ Parameters: plan_id, customer_id (from Step 1)
 ```
 
 Key techniques:
+
 - Explicit step ordering with numbered steps
 - Document dependencies between steps
 - Validation gate at each stage
@@ -52,6 +53,7 @@ Use when: Workflows span multiple services.
 ```
 
 Key techniques:
+
 - Clear phase separation per service
 - Explicit data passing between MCPs
 - Validation before moving to next phase
@@ -77,6 +79,7 @@ Use when: Output quality improves with iteration.
 ```
 
 Key techniques:
+
 - Explicit quality criteria (not "good enough")
 - Validation scripts for deterministic checks
 - Define the stop condition clearly
@@ -99,6 +102,7 @@ Use when: Same outcome, different tools depending on context.
 ```
 
 Key techniques:
+
 - Explicit decision criteria
 - Fallback options for each branch
 - Transparency about which tool was chosen and why
@@ -126,6 +130,7 @@ ELSE → flag for review, create compliance case
 ```
 
 Key techniques:
+
 - Embed domain rules in explicit logic (IF/ELSE, not vague language)
 - Compliance/validation before action
 - Comprehensive audit documentation

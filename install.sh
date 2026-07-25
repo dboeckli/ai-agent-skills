@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Install ai-agent-skills: clone or pull the repository, then symlink all skills
-# into ~/.claude/skills/ so Claude Code picks them up automatically.
+# into ~/.claude/skills/ and the statusline script into ~/.claude/statusline.sh.
 #
 # Usage: bash install.sh [repo-url]
 #   repo-url  GitHub URL to clone from. Optional when run from within the repo.
@@ -78,6 +78,40 @@ for skill_dir in "$INSTALL_DIR/.claude/skills"/*/; do
     fi
 done
 
+# ── Symlink scripts ──────────────────────────────────────────────────────────
+
+symlink_script() {
+    local source="$1" target="$2" label="$3"
+    if [[ ! -f "$source" ]]; then
+        echo "SKIP  $label — source not found in installed repo"
+        ((skipped++)) || true
+        return
+    fi
+    if [[ -L "$target" ]]; then
+        echo "SKIP  $label — symlink already exists"
+        ((skipped++)) || true
+    elif [[ -e "$target" ]]; then
+        echo "WARN  $label — $target exists and is not a symlink, skipping" >&2
+        ((skipped++)) || true
+    else
+        chmod +x "$source"
+        ln -s "$source" "$target"
+        echo "LINK  $label → $target"
+        ((linked++)) || true
+    fi
+}
+
+symlink_script \
+    "$INSTALL_DIR/scripts/statusline.sh" \
+    "$HOME/.claude/statusline.sh" \
+    "statusline.sh"
+
+mkdir -p "$HOME/.claude/scripts"
+symlink_script \
+    "$INSTALL_DIR/scripts/camel-springboot-matrix.sh" \
+    "$HOME/.claude/scripts/camel-springboot-matrix.sh" \
+    "camel-springboot-matrix.sh"
+
 echo ""
-echo "Done. $linked skill(s) linked, $skipped skipped."
+echo "Done. $linked item(s) linked, $skipped skipped."
 echo "Skills are available in Claude Code via /skill-name."
