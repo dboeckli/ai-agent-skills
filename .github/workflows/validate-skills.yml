@@ -2,11 +2,11 @@ name: Validate Skills
 
 on:
   push:
-    branches: [ "main", "master", "development", "feature/**", "release/**" ]
+    branches: ["main", "master", "development", "feature/**", "release/**"]
   pull_request:
-    branches: [ "main", "master", "development" ]
+    branches: ["main", "master", "development"]
   schedule:
-    - cron: '5 2 * * *' # daily at 2:05
+    - cron: "5 2 * * *" # daily at 2:05
 
 jobs:
   validate:
@@ -17,12 +17,12 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: '24'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@dboeckli'
+          node-version: "24"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@dboeckli"
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install --ignore-scripts
 
       - name: Lint API documentation
         run: npm run test
@@ -32,3 +32,25 @@ jobs:
 
       - name: Validate SKILL.md frontmatter
         run: bash .claude/skills/skill-best-practices/scripts/validate-skills.sh
+
+  publish:
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Use Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@dboeckli"
+
+      - name: Publish to GitHub Packages
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
