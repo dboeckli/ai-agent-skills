@@ -26,19 +26,31 @@ Each skill lives in `.claude/skills/<skill-name>/` and follows this layout:
 
 ### Installing Skills for Claude Code
 
-**Via npm (Plugin — recommended):**
+**Via npm — standard Claude Code approach (recommended):**
+Uses the official Claude Code Plugin system. Claude Code auto-detects the `.claude-plugin/plugin.json` manifest, loads all skills, and runs the SessionStart hook to install `statusline.sh`. No extra tools needed.
+
+npm blocks git URL installs by default — enable once:
+
+```bash
+npm config set allow-git all
+```
+
+Then install:
 
 ```bash
 npm install -g https://github.com/dboeckli/ai-agent-skills.git
 ```
 
-**Via skills CLI:**
+**Via skills CLI — alternative (third-party tool):**
+Useful for selectively combining skills from multiple repositories. Not part of Claude Code itself.
 
 ```bash
 npx skills add -g https://github.com/dboeckli/ai-agent-skills
 ```
 
-Claude Code detects the `.claude-plugin/plugin.json` manifest automatically and loads all skills.
+> **Installation method:** When prompted, choose **Copy to all agents** — skills work independently of paths across all agents (Claude Code, Amp, Cline, etc.).
+>
+> **WSL note:** In the interactive skill selection prompt, press **Space** to select/deselect a skill, then **Enter** to confirm. Enter alone does not select.
 
 ## Included Skills
 
