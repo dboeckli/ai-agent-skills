@@ -52,6 +52,10 @@ else
     fi
 fi
 
+# Prevent git from tracking file mode changes in the installed repo (chmod +x on scripts
+# would otherwise show as local modifications and block future pulls).
+git -C "$INSTALL_DIR" config core.fileMode false
+
 # ── Symlink skills ───────────────────────────────────────────────────────────
 
 mkdir -p "$SKILLS_TARGET_DIR"
