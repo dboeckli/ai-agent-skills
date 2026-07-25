@@ -86,16 +86,18 @@ npm blockiert Git-URL-Installs standardmässig. Einmalig freischalten:
 npm config set allow-git all
 ```
 
-Installieren:
+Installieren (mit manuellem Script-Aufruf, da npm Lifecycle-Scripts bei Git-URL-Installs blockiert):
 
 ```bash
-npm install -g https://github.com/dboeckli/ai-agent-skills.git#master
+npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#master && \
+  bash "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.sh"
 ```
 
 Aktualisieren:
 
 ```bash
-npm update -g @dboeckli/ai-agent-skills
+npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#master && \
+  bash "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.sh"
 ```
 
 ---

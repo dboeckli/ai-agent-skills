@@ -38,7 +38,8 @@ npm config set allow-git all
 Then install:
 
 ```bash
-npm install -g https://github.com/dboeckli/ai-agent-skills.git#master
+npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#master && \
+  bash "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.sh"
 ```
 
 **Via skills CLI — alternative (third-party tool):**
