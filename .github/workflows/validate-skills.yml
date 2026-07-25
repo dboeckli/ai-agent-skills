@@ -2,11 +2,11 @@ name: Validate Skills
 
 on:
   push:
-    paths:
-      - ".claude/skills/**/SKILL.md"
+    branches: ["main", "master", "development", "feature/**", "release/**"]
   pull_request:
-    paths:
-      - ".claude/skills/**/SKILL.md"
+    branches: ["main", "master", "development"]
+  schedule:
+    - cron: "5 2 * * *" # daily at 2:05
 
 jobs:
   validate:
@@ -14,5 +14,51 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Use Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+
+      - name: Test npm install
+        run: |
+          npm install -g --ignore-scripts .
+          bash "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.sh"
+
       - name: Validate SKILL.md frontmatter
         run: bash .claude/skills/skill-best-practices/scripts/validate-skills.sh
+
+      - name: Validate CLAUDE.md
+        run: bash .claude/skills/cc-best-practices/scripts/validate-claude-md.sh
+
+  publish:
+    needs: validate
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Use Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@dboeckli"
+
+      - name: Set version with git hash
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          BASE_VERSION=$(node -p "require('./package.json').version")
+          npm version "${BASE_VERSION}-${SHORT_SHA}" --no-git-tag-version
+
+      - name: Publish to GitHub Packages
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/master" ]; then
+            npm publish --tag latest
+          else
+            npm publish --tag dev
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
