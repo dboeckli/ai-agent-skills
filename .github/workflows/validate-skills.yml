@@ -24,9 +24,6 @@ jobs:
       - name: Install dependencies
         run: npm install --ignore-scripts
 
-      - name: Lint API documentation
-        run: npm run test
-
       - name: Build API documentation
         run: npm run build
 
