@@ -6,11 +6,11 @@ cd "$ROOT"
 
 if command -v npx &>/dev/null; then
     npx --yes prettier --write --log-level warn \
-        "**/*.md" "**/*.json" "**/*.yaml" "**/*.yml"
+        "CLAUDE.md" ".claude/**/*.md" ".claude/**/*.json" ".claude/**/*.yaml" ".claude/**/*.yml"
 fi
 
 if command -v shfmt &>/dev/null; then
-    find . -name "*.sh" -not -path "*/.git/*" -exec shfmt -w {} +
+    find .claude -name "*.sh" -exec shfmt -w {} +
 fi
 
 exit 0
