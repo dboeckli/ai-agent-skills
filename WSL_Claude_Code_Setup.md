@@ -189,23 +189,6 @@ Das Sandboxing kann für den gesamten Claude Code Prozess deaktiviert werden. Di
 
 ---
 
-## Skills einrichten
-
-Skills erweitern Claude Code um zusätzliche Fähigkeiten. Das Installationsskript klont das Repository und verlinkt alle enthaltenen Skills automatisch per Symlink nach `~/.claude/skills/`.
-
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/[dein-user]/ai-agent-skills/main/install.sh) \
-  https://github.com/[dein-user]/ai-agent-skills.git
-```
-
-Zum Aktualisieren auf den neuesten Stand dasselbe Skript erneut ausführen — es erkennt das vorhandene Repository und führt stattdessen `git pull` aus:
-
-```bash
-bash ~/projects/ai-agent-skills/install.sh
-```
-
----
-
 ## Projektzugriff und GitHub CLI
 
 ### Projektverzeichnis für Claude Code freigeben
