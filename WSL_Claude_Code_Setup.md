@@ -134,6 +134,14 @@ Context7 bietet Zugriff auf aktuelle Dokumentationen für Bibliotheken und Frame
 npm install -g ctx7
 ```
 
+### Wie Context7 in Claude Code greift
+
+Context7 ist kein Skill, sondern eine **globale Regel** (`~/.claude/rules/context7.md`), die in jeder Session automatisch aktiv ist. Sie weist Claude an, vor Antworten zu Library-Fragen das `ctx7`-CLI zu nutzen, um aktuelle Dokumentation zu holen — statt auf potenziell veraltetes Trainingswissen zu vertrauen.
+
+Betroffen sind z.B. Fragen zu Spring Boot, Apache Camel, Maven, Docker, Kubernetes, aber auch Claude-eigene Tooling-Themen wie Hooks, Skills oder die Anthropic API.
+
+Es gibt keinen `/context7`-Befehl — die Regel greift automatisch, sobald nach einer Library, einem Framework oder einem SDK gefragt wird.
+
 ---
 
 ## Sandboxing in Claude Code
