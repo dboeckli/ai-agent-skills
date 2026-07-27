@@ -144,6 +144,17 @@ Es gibt keinen `/context7`-Befehl — die Regel greift automatisch, sobald nach 
 
 ---
 
+## Stop-Hook: Formatter (format.sh)
+
+Nach jeder Claude-Session wird automatisch ein Stop-Hook ausgeführt, der Dateien mit Prettier und `shfmt` formatiert. Der Scope ist bewusst eingeschränkt auf:
+
+- `CLAUDE.md` im Projekt-Root
+- alle Dateien unter `.claude/` (Markdown, JSON, YAML, Shell-Skripte)
+
+**Warum nicht das gesamte Projekt?** Spring-Boot-Projekte haben in ihrer `pom.xml` Spotless konfiguriert, das für Markdown Flexmark und für Shell-Skripte eigene Formatierungsregeln nutzen kann. Prettier und Flexmark produzieren bei Markdown-Dateien teilweise inkompatible Ausgaben — z.B. bei Tabellen, Code-Blöcken oder Zeilenumbrüchen. Dasselbe gilt für Shell-Skripte: Ein projektweiter `shfmt`-Lauf würde die Spotless-Formatierung überschreiben und bei `mvn verify` zu Formatierungsfehlern führen.
+
+---
+
 ## Sandboxing in Claude Code
 
 Claude Code verfügt über ein integriertes Sandbox-System, das den Zugriff von Shell-Befehlen auf das Dateisystem und das Netzwerk einschränkt. **Sandboxing ist standardmässig aktiviert** und schützt das System vor unbeabsichtigten oder schädlichen Operationen.
