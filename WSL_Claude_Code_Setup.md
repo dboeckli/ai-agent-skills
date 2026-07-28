@@ -144,6 +144,70 @@ Es gibt keinen `/context7`-Befehl — die Regel greift automatisch, sobald nach 
 
 ---
 
+## Claude Code Konfiguration
+
+Die globale Konfiguration von Claude Code wird in `~/.claude/settings.json` gespeichert. Die Datei kann direkt bearbeitet werden.
+
+### Empfohlene Grundkonfiguration (WSL / Linux)
+
+```json
+{
+  "model": "claude-sonnet-4-6",
+  "theme": "light",
+  "permissions": {
+    "allow": [
+      "Bash(npx ctx7@latest *)",
+      "Bash(ctx7 *)"
+    ]
+  },
+  "skillOverrides": {
+    "skill-creator": "off"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "/home/<username>/.claude/statusline.sh"
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": false
+  }
+}
+```
+
+`<username>` durch den eigenen Linux-Benutzernamen ersetzen.
+
+### Empfohlene Grundkonfiguration (Windows — `%USERPROFILE%\.claude\settings.json`)
+
+```json
+{
+  "model": "claude-sonnet-4-6",
+  "theme": "light",
+  "permissions": {
+    "allow": [
+      "Bash(npx ctx7@latest *)",
+      "Bash(ctx7 *)"
+    ]
+  },
+  "skillOverrides": {
+    "skill-creator": "off"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"C:/Users/<username>/.claude/statusline.sh\""
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": false
+  }
+}
+```
+
+`<username>` durch den Windows-Benutzernamen ersetzen. Die `statusLine` ruft `bash` auf (Git Bash oder WSL), damit das `.sh`-Script ausgeführt werden kann.
+
+> **Hinweis:** Der Stop-Hook für `format.sh` wird automatisch durch das Install-Script eingetragen (siehe nächster Abschnitt) — er muss hier nicht manuell ergänzt werden.
+
+---
+
 ## Stop-Hook: Formatter (format.sh)
 
 Nach jeder Claude-Session wird automatisch ein Stop-Hook ausgeführt, der Dateien mit Prettier und `shfmt` formatiert. Der Scope ist bewusst eingeschränkt auf:

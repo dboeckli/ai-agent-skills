@@ -52,13 +52,15 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 
 ### Option 1: npm global — Empfohlen
 
-Installiert Skills, `statusline.sh` und den Formatter-Hook automatisch. Skills werden als Symlinks eingebunden — Reinstall genügt für Updates.
+Installiert Skills, `statusline.sh` und den Formatter-Hook automatisch. Skills werden als Symlinks (Linux/macOS/WSL) bzw. Directory-Junctions (Windows) eingebunden — Reinstall genügt für Updates.
 
 Einmalig npm für Git-URL-Installs freischalten:
 
 ```bash
 npm config set allow-git all
 ```
+
+#### Linux / macOS / WSL
 
 Installieren und Setup-Script ausführen:
 
@@ -86,13 +88,36 @@ Erwartete Ausgabe:
 ~/.claude/settings.json
 ```
 
-Ausserdem wird in `~/.claude/settings.json` ein Stop-Hook eingetragen, der nach jeder Session Dateien formatiert.
-
 Aktualisieren (gleicher Befehl):
 
 ```bash
 npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#master && \
   bash "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.sh"
+```
+
+#### Windows (PowerShell)
+
+Installieren und Setup-Script ausführen:
+
+```powershell
+npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#master
+& "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.ps1"
+```
+
+Skills werden als Directory-Junctions eingebunden (kein Admin-Recht nötig). Ausserdem wird in `%USERPROFILE%\.claude\settings.json` ein Stop-Hook eingetragen, der nach jeder Session Dateien formatiert.
+
+Installation prüfen:
+
+```powershell
+Get-ChildItem "$HOME\.claude\skills"
+Test-Path "$HOME\.claude\statusline.sh", "$HOME\.claude\settings.json"
+```
+
+Aktualisieren (gleicher Befehl):
+
+```powershell
+npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#master
+& "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.ps1"
 ```
 
 ### Option 2: skills CLI — Alternative
@@ -117,6 +142,70 @@ npx skills update ai-agent-skills
 > curl -fsSL https://raw.githubusercontent.com/dboeckli/ai-agent-skills/master/scripts/statusline.sh \
 >   -o ~/.claude/statusline.sh && chmod +x ~/.claude/statusline.sh
 > ```
+
+---
+
+## Konfiguration
+
+Nach der Installation die Datei `~/.claude/settings.json` (Linux/WSL) bzw. `%USERPROFILE%\.claude\settings.json` (Windows) manuell öffnen und folgende Einstellungen ergänzen oder anpassen.
+
+### Linux / WSL (`~/.claude/settings.json`)
+
+```json
+{
+  "model": "claude-sonnet-4-6",
+  "theme": "light",
+  "permissions": {
+    "allow": [
+      "Bash(npx ctx7@latest *)",
+      "Bash(ctx7 *)"
+    ]
+  },
+  "skillOverrides": {
+    "skill-creator": "off"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "/home/<username>/.claude/statusline.sh"
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": false
+  }
+}
+```
+
+`<username>` durch den eigenen Linux-Benutzernamen ersetzen (oder `~` verwenden, falls Claude Code das auflöst).
+
+### Windows (`%USERPROFILE%\.claude\settings.json`)
+
+```json
+{
+  "model": "claude-sonnet-4-6",
+  "theme": "light",
+  "permissions": {
+    "allow": [
+      "Bash(npx ctx7@latest *)",
+      "Bash(ctx7 *)"
+    ]
+  },
+  "skillOverrides": {
+    "skill-creator": "off"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"C:/Users/<username>/.claude/statusline.sh\""
+  },
+  "sandbox": {
+    "enabled": true,
+    "autoAllowBashIfSandboxed": false
+  }
+}
+```
+
+`<username>` durch den Windows-Benutzernamen ersetzen. Die `statusLine` ruft `bash` auf (Git Bash oder WSL), damit das `.sh`-Script ausgeführt werden kann.
+
+> **Hinweis:** Der Stop-Hook für `format.sh` wird automatisch durch `install-skills.ps1` (Windows) bzw. `install-skills.sh` (Linux/WSL) eingetragen — dieser muss nicht manuell gesetzt werden.
 
 ---
 

@@ -33,11 +33,19 @@ Installs skills, `statusline.sh`, and the formatter Stop hook. Enable git URL in
 npm config set allow-git all
 ```
 
-Install:
+Install (Linux / macOS / WSL):
 
 ```bash
 npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#master && \
   bash "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.sh"
+```
+
+Install (Windows — PowerShell):
+
+```powershell
+npm config set allow-git all
+npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#master
+& "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.ps1"
 ```
 
 **Via skills CLI — alternative:**
@@ -57,6 +65,31 @@ npx skills add -g https://github.com/dboeckli/ai-agent-skills
 > curl -fsSL https://raw.githubusercontent.com/dboeckli/ai-agent-skills/master/scripts/statusline.sh \
 >   -o ~/.claude/statusline.sh && chmod +x ~/.claude/statusline.sh
 > ```
+
+### Manual Configuration
+
+After installation, open `~/.claude/settings.json` (Linux/WSL) or `%USERPROFILE%\.claude\settings.json` (Windows) and add:
+
+```json
+{
+  "model": "claude-sonnet-4-6",
+  "theme": "light",
+  "permissions": {
+    "allow": ["Bash(npx ctx7@latest *)", "Bash(ctx7 *)"]
+  },
+  "skillOverrides": { "skill-creator": "off" },
+  "statusLine": {
+    "type": "command",
+    "command": "/home/<username>/.claude/statusline.sh"
+  },
+  "sandbox": { "enabled": true, "autoAllowBashIfSandboxed": false }
+}
+```
+
+On Windows, replace the `statusLine` command with:
+`"bash \"C:/Users/<username>/.claude/statusline.sh\""`
+
+The Stop hook for `format.sh` is added automatically by the install scripts.
 
 ## Included Skills
 
