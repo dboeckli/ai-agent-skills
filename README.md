@@ -145,6 +145,22 @@ npx skills update ai-agent-skills
 
 ---
 
+## Installation für Opencode
+
+Skills installieren:
+
+```bash
+npx skills add -g https://github.com/dboeckli/ai-agent-skills.git
+```
+
+Context7 für aktuelle API-Dokumentation einrichten:
+
+```bash
+npx ctx7 setup --opencode
+```
+
+---
+
 ## Konfiguration
 
 Nach der Installation die Datei `~/.claude/settings.json` (Linux/WSL) bzw. `%USERPROFILE%\.claude\settings.json` (Windows) manuell öffnen und folgende Einstellungen ergänzen oder anpassen.

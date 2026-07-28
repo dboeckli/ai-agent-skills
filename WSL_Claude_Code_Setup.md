@@ -318,9 +318,156 @@ Im Plugin-Panel den **MCP Server aktivieren** (Checkbox „Enable MCP Server"). 
 - Run- und Debug-Konfigurationen — Claude kann Builds direkt triggern
 - IntelliJ-Aktionen wie Refactoring, „Find Usages" oder „Go to Definition"
 
-WSL2 leitet `127.0.0.1` automatisch an den Windows-Host weiter. Claude Code im WSL-Terminal erreicht den IntelliJ-MCP-Server deshalb ohne weitere Konfiguration unter `http://127.0.0.1:64342/sse`.
+Damit Claude Code im WSL-Terminal den IntelliJ-MCP-Server erreicht, muss WSL2 im **mirrored networking mode** betrieben werden (siehe nächster Abschnitt). Der Server ist dann unter `http://127.0.0.1:64342/stream` erreichbar.
 
 > **Brave Mode** (Run shell commands without confirmation) bleibt deaktiviert — Claude Code übernimmt die Ausführung von Shell-Befehlen selbst und bringt sein eigenes Berechtigungssystem mit.
+
+---
+
+## WSL mirrored networking für IntelliJ MCP Server
+
+Seit Windows 11 Version 22H2 unterstützt WSL2 den **mirrored networking mode**, bei dem WSL denselben Netzwerk-Stack wie Windows verwendet. Dadurch ist `127.0.0.1` aus WSL heraus direkt auf dem Windows-Host erreichbar — Voraussetzung für den IntelliJ-MCP-Server. Weitere Details: [WSL networking documentation](https://learn.microsoft.com/en-us/windows/wsl/networking)
+
+### Aktivierung
+
+Öffne in Windows die Datei `%USERPROFILE%\.wslconfig`. Falls die Datei nicht existiert, erstelle sie mit folgendem Inhalt:
+
+```ini
+[wsl2]
+networkingMode=mirrored
+```
+
+Danach WSL vollständig neu starten:
+
+```bash
+wsl --shutdown
+```
+
+Anschliessend die WSL-Distribution wieder starten (z.B. Ubuntu über das Startmenü oder `wsl`).
+
+### Testen
+
+Nach dem Neustart prüfen, ob der IntelliJ-MCP-Server aus WSL erreichbar ist:
+
+```bash
+curl http://127.0.0.1:64342
+```
+
+Erwartete Ausgabe bei laufendem IntelliJ mit aktiviertem MCP Server:
+
+```
+OK
+```
+
+### MCP Server URL in IntelliJ holen
+
+In IntelliJ unter **Settings → Tools → MCP Server** kann die können die URLs geholt werden:
+
+```
+http://127.0.0.1:64342/stream
+http://127.0.0.1:64342/sse
+```
+
+---
+
+## IntelliJ MCP Server in Claude Code registrieren (HTTP)
+
+Dieser Abschnitt beschreibt, wie IntelliJ als MCP Server in Claude Code registriert wird — damit Claude Code aus dem Terminal heraus auf die IDE-Intelligenz zugreifen kann (Projektstruktur, Symbole, Run-Konfigurationen, Refactoring).
+
+### Exakte IntelliJ-Konfiguration kopieren
+
+In IntelliJ öffnen:
+
+**Settings → Tools → MCP Server**
+
+Dort den Server aktivieren und unter «Manual Client Configuration» auf **Copy HTTP Stream Config** klicken.
+
+Die Standard-Adresse lautet:
+
+```
+http://127.0.0.1:64342/stream
+```
+
+Falls IntelliJ beim Kopieren einen abweichenden Pfad ausgibt (z.B. `/mcp`), diesen stattdessen verwenden.
+
+### MCP Server in Claude Code registrieren
+
+In Claude Code (WSL) den Server mit folgendem Befehl hinzufügen:
+
+```bash
+claude mcp add --transport http --scope user intellij \
+  http://127.0.0.1:64342/stream
+```
+
+Erwartete Ausgabe:
+
+```
+Added HTTP MCP server intellij with URL: http://127.0.0.1:64342/stream to user config
+File modified: /home/dboeckli/.claude.json
+```
+
+Falls der kopierte Pfad `/mcp` lautet:
+
+```bash
+claude mcp add --transport http --scope user intellij \
+  http://127.0.0.1:64342/mcp
+```
+
+### Verbindung prüfen
+
+```bash
+claude mcp list
+claude mcp get intellij
+```
+
+Danach Claude Code neu starten und innerhalb der Sitzung eingeben:
+
+```
+/mcp
+```
+
+Dort sollte `intellij` verbunden angezeigt werden.
+
+---
+
+## Opencode einrichten
+
+Opencode ist ein CLI-Tool (Alternative zu Claude Code) für die KI-gestützte Code-Entwicklung im Terminal.
+
+### Installation
+
+```bash
+curl -fsSL https://opencode.ai/install | bash
+```
+
+### Globale Konfiguration
+
+Die globale Konfiguration liegt in `~/.config/opencode/opencode.jsonc`. Hier wird der IntelliJ-MCP-Server eingetragen, damit opencode auf die IDE-Intelligenz zugreifen kann:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "idea": {
+      "type": "remote",
+      "url": "http://127.0.0.1:64342/sse",
+      "headers": {}
+    }
+  }
+}
+```
+
+### Nutzung
+
+```bash
+# Im Projektverzeichnis starten
+opencode
+
+# Mit einem bestimmten Modell
+opencode --model anthropic/claude-sonnet-4-6
+```
+
+Nach dem Start fragt opencode nach den nötigen Berechtigungen für das Projektverzeichnis. Der MCP-Server zu IntelliJ wird automatisch verbunden, sobald IntelliJ läuft und der MCP-Server dort aktiviert ist.
 
 ---
 
