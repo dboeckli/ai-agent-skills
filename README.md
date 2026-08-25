@@ -161,6 +161,32 @@ npx ctx7 setup --opencode
 
 ---
 
+## Sandbox (lokale Dev-Umgebung)
+
+Die Sandbox wird durch das opencode-sandbox-kit provisioniert und läuft als Docker-Container. Sie mounted dieses Repo, startet opencode und verbindet den IntelliJ-MCP-Server.
+
+### Sandbox starten (opencode-sandbox-kit)
+
+Kit-Quelle freischalten (GitHub ohne Klonen):
+
+```powershell
+sbx settings set kit.allowedSources --% "[\"docker.io/\",\"github.com/dboeckli/\"]"
+```
+
+Neue Sandbox starten:
+
+```powershell
+sbx run opencode --name ai-agent-skills --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" "C:\development\projects\ai-agent-skills"
+```
+
+Kit auf eine bestehende Sandbox anwenden (startet die Sandbox neu, VM-Zustand bleibt erhalten):
+
+```powershell
+sbx kit add ai-agent-skills "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
+```
+
+---
+
 ## Konfiguration
 
 Nach der Installation die Datei `~/.claude/settings.json` (Linux/WSL) bzw. `%USERPROFILE%\.claude\settings.json` (Windows) manuell öffnen und folgende Einstellungen ergänzen oder anpassen.
@@ -172,10 +198,7 @@ Nach der Installation die Datei `~/.claude/settings.json` (Linux/WSL) bzw. `%USE
   "model": "claude-sonnet-4-6",
   "theme": "light",
   "permissions": {
-    "allow": [
-      "Bash(npx ctx7@latest *)",
-      "Bash(ctx7 *)"
-    ]
+    "allow": ["Bash(npx ctx7@latest *)", "Bash(ctx7 *)"]
   },
   "skillOverrides": {
     "skill-creator": "off"
@@ -200,10 +223,7 @@ Nach der Installation die Datei `~/.claude/settings.json` (Linux/WSL) bzw. `%USE
   "model": "claude-sonnet-4-6",
   "theme": "light",
   "permissions": {
-    "allow": [
-      "Bash(npx ctx7@latest *)",
-      "Bash(ctx7 *)"
-    ]
+    "allow": ["Bash(npx ctx7@latest *)", "Bash(ctx7 *)"]
   },
   "skillOverrides": {
     "skill-creator": "off"
