@@ -1,6 +1,19 @@
 # AGENTS.md — AI Agent Skills Repository
 
-This is a **SKILL.md package** — a collection of reusable AI-agent skills, not an application. No build, test, lint, or typecheck commands exist.
+This is a **SKILL.md package** — a collection of reusable AI-agent skills, not an application. No application build exists, but skills and docs are **validated and formatted** — see below.
+
+## Build & verify commands
+
+- Validate SKILL.md frontmatter: `bash .claude/skills/skill-best-practices/scripts/validate-skills.sh`
+- Validate CLAUDE.md (required sections + skill table sync): `bash .claude/skills/cc-best-practices/scripts/validate-claude-md.sh`
+- Format (Prettier + shfmt, Stop hook): `bash .claude/hooks/format.sh`
+- CI: `.github/workflows/validate-skills.yml` runs the validators on push/PR and publishes the npm package to GitHub Packages.
+
+After changing a skill or doc, always verify: run the relevant command above and report its output (evidence, not just "done").
+
+## Sandbox quirk (background)
+
+The sandbox mounts the repo via filesystem passthrough, which blocks symlinks — `npm` installs would fail with `EPERM` unless bin links are skipped. The sandbox kit sets `npm_config_bin_links=false` globally, so no manual export is needed here.
 
 ## Repository Structure
 
@@ -14,12 +27,12 @@ This is a **SKILL.md package** — a collection of reusable AI-agent skills, not
 
 ## Skills
 
-| Skill | Trigger |
-|---|---|
-| `camel-matrix` | "generate camel matrix", "update camel compatibility" — runs `.claude/skills/camel-matrix/scripts/camel-springboot-matrix.sh`, outputs `target/camel-springboot-matrix.adoc` |
-| `cc-best-practices` | Questions about effective Claude Code usage, context management, prompting |
-| `project-references` | Look up conventions from sibling repos under `~/projects/referenzen/` |
-| `skill-best-practices` | Creating, reviewing, or troubleshooting SKILL.md files |
+| Skill                  | Trigger                                                                                                                                                                      |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `camel-matrix`         | "generate camel matrix", "update camel compatibility" — runs `.claude/skills/camel-matrix/scripts/camel-springboot-matrix.sh`, outputs `target/camel-springboot-matrix.adoc` |
+| `cc-best-practices`    | Questions about effective Claude Code usage, context management, prompting                                                                                                   |
+| `project-references`   | Look up conventions from sibling repos under `~/projects/referenzen/`                                                                                                        |
+| `skill-best-practices` | Creating, reviewing, or troubleshooting SKILL.md files                                                                                                                       |
 
 ## SKILL.md Frontmatter Rules
 
@@ -43,6 +56,7 @@ A Stop hook (`bash .claude/hooks/format.sh`) runs Prettier on `CLAUDE.md` and `.
 ## CI
 
 `.github/workflows/validate-skills.yml` runs on push/PR to main/master/development:
+
 - Validates SKILL.md frontmatter via `skill-best-practices/scripts/validate-skills.sh`
 - Validates CLAUDE.md via `cc-best-practices/scripts/validate-claude-md.sh`
 - Publishes to GitHub Packages on push (npm registry)

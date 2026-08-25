@@ -2,6 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+For all tasks in this repository, the conventions in [`AGENTS.md`](./AGENTS.md) apply — read it first
+and follow it fully (verify commands, sandbox quirk, SKILL.md rules). In case of conflict, `AGENTS.md` wins.
+
 ## Repository Purpose
 
 A collection of reusable AI agent skills in the open SKILL.md format. Skills are designed to be AI-agnostic — they rely only on standard tools (`git`, `gh`, shell commands) and contain no Claude-specific dependencies.
