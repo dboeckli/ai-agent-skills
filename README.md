@@ -44,6 +44,7 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 | `cc-best-practices`    | Anleitung zur effektiven Nutzung von Claude Code: Kontextmanagement, Explore-Plan-Implement-Workflow, Prompting-Techniken und häufige Fehlermuster.         |
 | `skill-best-practices` | Leitfaden zum Erstellen, Strukturieren und Verbessern von SKILL.md Dateien: Frontmatter, Trigger-Beschreibungen, Testen und Troubleshooting.                |
 | `project-references`   | Konventionen und Implementierungsmuster aus eigenen GitHub-Repositories nachschlagen, die lokal unter `~/projects/referenzen/` ausgecheckt sind; ausserdem eine Übersicht der GitHub-Actions-Trigger (push, PR, schedule/cron) über alle Repos als Markdown-Report erzeugen. |
+| `cron-schedule-planner` | Erstellt eine Übersicht der GitHub-Actions-Cron-Zeitpläne über mehrere Repos (via `gh` oder lokale Checkouts), klassifiziert die Job-Intensität und schlägt eine Entzerrung in wenig belegte Zeitfenster vor (Markdown-Report mit Stunden-Histogramm). |
 | `camel-matrix`         | Erzeugt eine Markdown-Kompatibilitätsmatrix für Apache Camel Spring Boot, Spring Boot und Apache CXF. Unterstützt optional einen Versionsbereich (min max). |
 
 ---

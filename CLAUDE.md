@@ -96,12 +96,13 @@ The Stop hook for `format.sh` is added automatically by the install scripts.
 
 ## Included Skills
 
-| Skill                  | Trigger                                                                                                                                                   |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cc-best-practices`    | Questions about effective Claude Code usage, context management, prompting, plan mode                                                                     |
-| `skill-best-practices` | Creating, reviewing, or troubleshooting SKILL.md files                                                                                                    |
-| `project-references`   | Looking up conventions from sibling GitHub repos under `~/projects/referenzen/`, or generating a GitHub Actions trigger/cron overview report across repos |
-| `camel-matrix`         | Generate or update the Apache Camel Spring Boot compatibility matrix                                                                                      |
+| Skill                   | Trigger                                                                                                                                                   |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cc-best-practices`     | Questions about effective Claude Code usage, context management, prompting, plan mode                                                                     |
+| `skill-best-practices`  | Creating, reviewing, or troubleshooting SKILL.md files                                                                                                    |
+| `project-references`    | Looking up conventions from sibling GitHub repos under `~/projects/referenzen/`, or generating a GitHub Actions trigger/cron overview report across repos |
+| `cron-schedule-planner` | Overview and redistribution of GitHub Actions cron schedules across repos (collisions, intensity, report)                                                 |
+| `camel-matrix`          | Generate or update the Apache Camel Spring Boot compatibility matrix                                                                                      |
 
 ## Conventions When Adding a New Skill
 

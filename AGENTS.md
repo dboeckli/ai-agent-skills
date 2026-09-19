@@ -47,6 +47,7 @@ The sandbox mounts the repo via filesystem passthrough, which blocks symlinks �
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `camel-matrix`         | "generate camel matrix", "update camel compatibility" — runs `.claude/skills/camel-matrix/scripts/camel-springboot-matrix.sh`, outputs `target/camel-springboot-matrix.md` |
 | `cc-best-practices`    | Questions about effective Claude Code usage, context management, prompting                                                                                                   |
+| `cron-schedule-planner` | "when do my cron actions run", "do my scheduled builds collide" — runs `.claude/skills/cron-schedule-planner/scripts/cron-schedule-planner.sh`, outputs `target/cron-schedule-overview.md` |
 | `project-references`   | Look up conventions from sibling repos under `~/projects/referenzen/`                                                                                                        |
 | `skill-best-practices` | Creating, reviewing, or troubleshooting SKILL.md files                                                                                                                       |
 
