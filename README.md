@@ -43,8 +43,8 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `cc-best-practices`    | Anleitung zur effektiven Nutzung von Claude Code: Kontextmanagement, Explore-Plan-Implement-Workflow, Prompting-Techniken und häufige Fehlermuster.         |
 | `skill-best-practices` | Leitfaden zum Erstellen, Strukturieren und Verbessern von SKILL.md Dateien: Frontmatter, Trigger-Beschreibungen, Testen und Troubleshooting.                |
-| `project-references`   | Konventionen und Implementierungsmuster aus eigenen GitHub-Repositories nachschlagen, die lokal unter `~/projects/referenzen/` ausgecheckt sind.            |
-| `camel-matrix`         | Erzeugt eine AsciiDoc-Kompatibilitätsmatrix für Apache Camel Spring Boot, Spring Boot und Apache CXF. Unterstützt optional einen Versionsbereich (min max). |
+| `project-references`   | Konventionen und Implementierungsmuster aus eigenen GitHub-Repositories nachschlagen, die lokal unter `~/projects/referenzen/` ausgecheckt sind; ausserdem eine Übersicht der GitHub-Actions-Trigger (push, PR, schedule/cron) über alle Repos als Markdown-Report erzeugen. |
+| `camel-matrix`         | Erzeugt eine Markdown-Kompatibilitätsmatrix für Apache Camel Spring Boot, Spring Boot und Apache CXF. Unterstützt optional einen Versionsbereich (min max). |
 
 ---
 
@@ -173,17 +173,54 @@ Kit-Quelle freischalten (GitHub ohne Klonen):
 sbx settings set kit.allowedSources --% "[\"docker.io/\",\"github.com/dboeckli/\"]"
 ```
 
-Neue Sandbox starten:
+Neue Sandbox starten (OpenCode):
 
 ```powershell
-sbx run opencode --name ai-agent-skills --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" "C:\development\projects\ai-agent-skills"
+sbx run opencode `
+    --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
+    --template docker/sandbox-templates:opencode-docker-0.5.0 `
+    --no-share-skills `
+    --static-mcp idea `
+    .
 ```
 
-Kit auf eine bestehende Sandbox anwenden (startet die Sandbox neu, VM-Zustand bleibt erhalten):
+Mit Kubernetes-Support (optional):
 
 ```powershell
-sbx kit add ai-agent-skills "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
+sbx run opencode `
+    --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
+    --template docker/sandbox-templates:opencode-docker-0.5.0 `
+    --no-share-skills `
+    --static-mcp idea `
+    . `
+    "$env:USERPROFILE\.kube:ro"
 ```
+
+Claude Code (Home) und Mammouth Code:
+
+```powershell
+sbx run claude `
+    --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
+    --template docker/sandbox-templates:claude-code-docker-0.5.0 `
+    --no-share-skills `
+    --static-mcp idea `
+    .
+```
+
+```powershell
+sbx run "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=mammouth-agent" `
+    --no-share-skills `
+    --static-mcp idea `
+    .
+```
+
+Kit auf eine bestehende Sandbox anwenden (startet die Sandbox neu, VM-Zustand bleibt erhalten); den Sandbox-Namen mit `sbx ls` ermitteln:
+
+```powershell
+sbx kit add <sandbox-name> "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
+```
+
+Voraussetzungen: GitHub-Secret registrieren (`sbx secret set github`); Details in der `INSTALL.md` des opencode-sandbox-kit.
 
 ---
 

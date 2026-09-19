@@ -14,7 +14,7 @@ RELEASES_URL="https://camel.apache.org/releases/"
 
 MIN_VERSION="${1:-3.0.0}"
 MAX_VERSION="${2:-99.99.99}"
-OUTPUT_ADOC="target/camel-springboot-matrix.adoc"
+OUTPUT_MD="target/camel-springboot-matrix.md"
 
 ver_to_int() {
 	echo "$1" | awk -F. '{ printf "%d%03d%03d", $1, $2, $3 }'
@@ -56,9 +56,16 @@ SPRINGBOOT_DATES=$(curl -sf "$SB_STARTER_URL/" | parse_dates_from_listing)
 
 # ── Lookup helpers ─────────────────────────────────────────────────────────
 
+# Map each release version to LTS / non-LTS from the release description.
+# The releases page marks LTS releases explicitly ("... LTS release X.Y.Z");
+# every other release is not LTS.
 RELEASE_TYPES=$(echo "$RELEASES_PAGE" |
-	grep -oiE '(patch|minor|major|LTS) release [0-9]+\.[0-9]+\.[0-9]+' |
-	awk '{print $3, toupper($1)}')
+	grep -oiE 'releases-desc">[^<]*' |
+	sed -E 's/.*releases-desc">//' |
+	awk 'match($0, /[0-9]+\.[0-9]+\.[0-9]+/) {
+		v = substr($0, RSTART, RLENGTH)
+		print v, ($0 ~ /LTS/ ? "LTS" : "non-LTS")
+	}')
 
 get_release_type() {
 	echo "$RELEASE_TYPES" | awk -v v="$1" '$1 == v { print $2; exit }'
@@ -109,40 +116,38 @@ VERSION_COUNT=$(echo "$ALL_VERSIONS" | wc -l | tr -d ' ')
 echo "Found $VERSION_COUNT versions. Fetching POM files..."
 echo ""
 
-# ── Write AsciiDoc header ──────────────────────────────────────────────────
+# ── Write Markdown header ──────────────────────────────────────────────────
 
-mkdir -p "$(dirname "$OUTPUT_ADOC")"
+mkdir -p "$(dirname "$OUTPUT_MD")"
 
 SOURCE_URL="https://stackoverflow.com/questions/68087511/compatibility-of-camel-springboot-and-spring-boot"
 
 {
-	echo "= Camel Spring Boot Compatibility Matrix"
-	echo ":generated: $(date '+%Y-%m-%d %H:%M:%S')"
-	echo ":cutover: $CUTOVER"
+	echo "# Camel Spring Boot Compatibility Matrix"
 	echo ""
-	echo "Generated: {generated}"
+	echo "- Generated: $(date '+%Y-%m-%d %H:%M:%S')"
+	echo "- Cutover: $CUTOVER"
 	echo ""
-	echo "== Sources"
+	echo "## Sources"
 	echo ""
-	echo "* Spring Boot compatibility rules: $SOURCE_URL"
-	echo "* LTS and release type info: $RELEASES_URL"
-	echo "* Camel release dates (versions < {cutover}): $SB_URL"
-	echo "* Camel release dates (versions >= {cutover}): $PARENT_URL"
-	echo "* Spring Boot release dates: $SB_STARTER_URL"
-	echo "* Apache CXF version: $PARENT_URL (camel-parent POM, property <cxf-version>)"
+	echo "- Spring Boot compatibility rules: $SOURCE_URL"
+	echo "- LTS and release type info: $RELEASES_URL"
+	echo "- Camel release dates (versions < $CUTOVER): $SB_URL"
+	echo "- Camel release dates (versions >= $CUTOVER): $PARENT_URL"
+	echo "- Spring Boot release dates: $SB_STARTER_URL"
+	echo "- Apache CXF version: $PARENT_URL (camel-parent POM, property \`<cxf-version>\`)"
 	echo ""
-	echo "== POM Sources"
+	echo "## POM Sources"
 	echo ""
-	echo "* Spring Boot version, versions < {cutover}: link:$SB_URL[]"
-	echo "* Spring Boot version + CXF version, versions >= {cutover}: link:$PARENT_URL[]"
-	echo "* CXF version, versions < {cutover}: link:$PARENT_URL[] (fetched additionally)"
+	echo "- Spring Boot version, versions < $CUTOVER: $SB_URL"
+	echo "- Spring Boot version + CXF version, versions >= $CUTOVER: $PARENT_URL"
+	echo "- CXF version, versions < $CUTOVER: $PARENT_URL (fetched additionally)"
 	echo ""
-	echo "== Matrix"
+	echo "## Matrix"
 	echo ""
-	echo "[cols=\"10,6,10,10,10,10,10,~\", options=\"header\"]"
-	echo "|==="
-	echo "| Camel Version | Type | Camel Release Date | Spring Boot Version | Spring Boot Release Date | CXF Version | CXF POM URL | Spring Boot POM URL"
-} >"$OUTPUT_ADOC"
+	echo "| Camel Version | Type | Camel Release Date | Spring Boot Version | Spring Boot Release Date | CXF Version | CXF POM | Spring Boot POM |"
+	echo "| --- | --- | --- | --- | --- | --- | --- | --- |"
+} >"$OUTPUT_MD"
 
 printf "%-18s | %-6s | %-12s | %-20s | %-12s | %-12s | %s\n" \
 	"Camel Version" "Type" "Camel Date" "Spring Boot Version" "SB Date" "CXF Version" "POM URL"
@@ -178,7 +183,7 @@ while IFS= read -r VERSION; do
 	[ -z "$CXF_VERSION" ] && CXF_VERSION="N/A"
 
 	REL_TYPE=$(get_release_type "$VERSION")
-	[ -z "$REL_TYPE" ] && REL_TYPE="?"
+	[ -z "$REL_TYPE" ] && REL_TYPE="non-LTS"
 
 	CAMEL_DATE=$(get_camel_date "$VERSION")
 	[ -z "$CAMEL_DATE" ] && CAMEL_DATE="?"
@@ -186,14 +191,12 @@ while IFS= read -r VERSION; do
 	SB_DATE=$(get_sb_date "$SB_VERSION")
 	[ -z "$SB_DATE" ] && SB_DATE="?"
 
-	echo "| $VERSION | $REL_TYPE | $CAMEL_DATE | $SB_VERSION | $SB_DATE | $CXF_VERSION | link:$CXF_POM_URL[] | link:$SB_POM_URL[]" >>"$OUTPUT_ADOC"
+	echo "| $VERSION | $REL_TYPE | $CAMEL_DATE | $SB_VERSION | $SB_DATE | $CXF_VERSION | [POM]($CXF_POM_URL) | [POM]($SB_POM_URL) |" >>"$OUTPUT_MD"
 	printf "%-18s | %-6s | %-12s | %-20s | %-12s | %-12s | %s\n" \
 		"$VERSION" "$REL_TYPE" "$CAMEL_DATE" "$SB_VERSION" "$SB_DATE" "$CXF_VERSION" "$SB_POM_URL"
 
 	sleep 0.05
 done <<<"$ALL_VERSIONS"
 
-echo "|===" >>"$OUTPUT_ADOC"
-
 echo ""
-echo "Matrix saved to: $OUTPUT_ADOC"
+echo "Matrix saved to: $OUTPUT_MD"

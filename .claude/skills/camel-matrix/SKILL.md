@@ -1,11 +1,11 @@
 ---
 name: camel-matrix
-description: Generates an AsciiDoc compatibility matrix for Apache Camel Spring Boot, Spring Boot, and Apache CXF versions by running the camel-springboot-matrix.sh script. Use when the user asks to generate or update the Camel compatibility matrix, check Camel Spring Boot version compatibility, or run the camel-springboot-matrix script. Supports optional version range arguments (min max).
+description: Generates a Markdown compatibility matrix for Apache Camel Spring Boot, Spring Boot, and Apache CXF versions by running the camel-springboot-matrix.sh script. Use when the user asks to generate or update the Camel compatibility matrix, check Camel Spring Boot version compatibility, or run the camel-springboot-matrix script. Supports optional version range arguments (min max).
 ---
 
 # Camel Spring Boot Compatibility Matrix
 
-Run `scripts/camel-springboot-matrix.sh` (bundled in this skill) to generate `target/camel-springboot-matrix.adoc` relative to the current project directory. The `target/` directory is created automatically if it does not exist.
+Run `scripts/camel-springboot-matrix.sh` (bundled in this skill) to generate `target/camel-springboot-matrix.md` relative to the current project directory. The `target/` directory is created automatically if it does not exist.
 
 ## Arguments
 
@@ -24,5 +24,5 @@ bash "${CLAUDE_PLUGIN_ROOT}/scripts/camel-springboot-matrix.sh" ${ARGUMENTS:-4.1
 
 2. After completion, report:
    - How many Camel versions were processed
-   - That `target/camel-springboot-matrix.adoc` was created/updated in the current project directory
+   - That `target/camel-springboot-matrix.md` was created/updated in the current project directory
    - The last 5 rows of the generated table so the user can verify the output
