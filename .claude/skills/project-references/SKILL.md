@@ -1,6 +1,6 @@
 ---
 name: project-references
-description: "Look up conventions, patterns, and concrete implementations from your own GitHub repositories checked out locally under ~/projects/referenzen/. Use this skill whenever there is uncertainty about how something is done in your codebase family — e.g. Helm chart structure, Kubernetes manifests, framework configuration patterns, Docker Compose conventions, CI/CD pipeline setup, or any other recurring architectural decision. Invoke it proactively before guessing at a convention; always cite the source project and path when a pattern is adopted. Also use when the user asks to check out, update, or search reference repositories."
+description: "Look up conventions, patterns, and concrete implementations from your own GitHub repositories checked out locally under ~/projects/referenzen/. Use this skill whenever there is uncertainty about how something is done in your codebase family — e.g. Helm chart structure, Kubernetes manifests, framework configuration patterns, Docker Compose conventions, CI/CD pipeline setup, or any other recurring architectural decision. Invoke it proactively before guessing at a convention; always cite the source project and path when a pattern is adopted. Also use when the user asks to check out, update, or search reference repositories, or to generate an overview/report of GitHub Actions triggers (push, pull_request, schedule/cron) across repositories."
 ---
 
 ---
@@ -87,6 +87,21 @@ Actions:
 
 Result: Exact config from a proven sibling project, not guessed.
 
+### Example 4: Overview of GitHub Actions triggers
+
+User says: "When do my projects run their GitHub Actions — push, PR, or schedule?"
+
+Actions:
+
+1. Run `bash scripts/list-workflow-triggers.sh` (add `--glob` to narrow to one
+   pipeline, `--root` for a different checkout directory)
+2. Present the sorted overview (weekday/time, human-readable plus original
+   cron) and the event-only workflows
+3. Point the user to the generated report at `target/workflow-triggers.md`
+
+Result: Consolidated, time-sorted trigger overview across all reference repos
+plus a Markdown report, without opening each workflow file.
+
 ---
 
 ## Repository source
@@ -139,6 +154,35 @@ bash scripts/sync-all.sh --limit 50
 "sync all" or "update all references". For a single repo prefer
 `clone-or-update.sh`.
 
+### `scripts/list-workflow-triggers.sh [--root <dir>] [--glob <pattern>] [--out <file>] [--no-report]`
+
+Scans every repo checkout for `.github/workflows/*.yml` and `*.yaml`, extracts
+the triggers from the `on:` block (`push`, `pull_request`, `schedule`,
+`workflow_dispatch`, `release`, …) plus any `cron:` expressions, prints the
+overview and writes a Markdown report. Scheduled workflows are **sorted by
+weekday/time** and shown with a **human-readable run time** (e.g. `Monday
+02:05`) next to the **original cron expression**; workflows without a schedule
+are listed in a separate event-only section. Read-only, no network access.
+
+- `--root <dir>` — directory containing repo checkouts. Default:
+  `$REFERENZEN_DIR` or `~/projects/referenzen`.
+- `--glob <pattern>` — optional filename filter, e.g. `maven-build.yml`.
+  Default: all workflows.
+- `--out <file>` — Markdown report path. Default: `target/workflow-triggers.md`
+  (relative to the current project directory, created if missing).
+- `--no-report` — print to stdout only, skip the report file.
+
+```bash
+# Overview + report for all reference repos
+bash scripts/list-workflow-triggers.sh
+
+# Only maven-build.yml, custom report location
+bash scripts/list-workflow-triggers.sh --glob 'maven-build.yml' --out target/maven-triggers.md
+
+# A different checkout root (e.g. Windows mount)
+bash scripts/list-workflow-triggers.sh --root /mnt/c/Development/projects/all-git-repos
+```
+
 ---
 
 ## Workflows
@@ -162,6 +206,13 @@ ls ~/projects/referenzen/
 
 If `~/claude-shared/projekte.txt` exists, show its contents alongside to
 explain which repos are tracked vs. which are locally present.
+
+### 4. Overview of GitHub Actions triggers
+
+Run `scripts/list-workflow-triggers.sh` to get a cross-repo overview of every
+workflow's `on:` triggers and `cron:` entries. It also writes the report to
+`target/workflow-triggers.md`. Use `--glob` to focus on a single pipeline
+(e.g. `maven-build.yml`) and `--root` for a different checkout directory.
 
 ---
 

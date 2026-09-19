@@ -45,7 +45,7 @@ The sandbox mounts the repo via filesystem passthrough, which blocks symlinks �
 
 | Skill                  | Trigger                                                                                                                                                                      |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `camel-matrix`         | "generate camel matrix", "update camel compatibility" — runs `.claude/skills/camel-matrix/scripts/camel-springboot-matrix.sh`, outputs `target/camel-springboot-matrix.adoc` |
+| `camel-matrix`         | "generate camel matrix", "update camel compatibility" — runs `.claude/skills/camel-matrix/scripts/camel-springboot-matrix.sh`, outputs `target/camel-springboot-matrix.md` |
 | `cc-best-practices`    | Questions about effective Claude Code usage, context management, prompting                                                                                                   |
 | `project-references`   | Look up conventions from sibling repos under `~/projects/referenzen/`                                                                                                        |
 | `skill-best-practices` | Creating, reviewing, or troubleshooting SKILL.md files                                                                                                                       |
@@ -93,6 +93,6 @@ npx skills add -g https://github.com/dboeckli/ai-agent-skills
 ## Config
 
 - `.claude/settings.json` — statusLine + Stop hook for formatter
-- `.gitignore` excludes `.claude/settings.local.json`, `target/camel-springboot-matrix.adoc`
+- `.gitignore` excludes `.claude/settings.local.json`, `/target/`
 - `.npmignore` excludes `.github/`, `CLAUDE.md`, `target/` from npm package
 - All text files: LF line endings, UTF-8 encoding (enforced by `.gitattributes`)
