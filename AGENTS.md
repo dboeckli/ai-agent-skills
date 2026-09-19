@@ -11,6 +11,22 @@ This is a **SKILL.md package** — a collection of reusable AI-agent skills, not
 
 After changing a skill or doc, always verify: run the relevant command above and report its output (evidence, not just "done").
 
+## Sandbox (opencode-sandbox-kit)
+
+Run this repo inside an opencode-sandbox-kit sandbox — canonical, multiline, **no `--name`**,
+workspace mount `.`, `--no-share-skills`, `--static-mcp idea`, pinned template:
+
+```powershell
+sbx run opencode `
+    --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
+    --template docker/sandbox-templates:opencode-docker-0.5.0 `
+    --no-share-skills `
+    --static-mcp idea `
+    .
+```
+
+Claude Code / Mammouth Code variants and the `sbx kit add` command are documented in `README.md`.
+
 ## Sandbox quirk (background)
 
 The sandbox mounts the repo via filesystem passthrough, which blocks symlinks — `npm` installs would fail with `EPERM` unless bin links are skipped. The sandbox kit sets `npm_config_bin_links=false` globally, so no manual export is needed here.
