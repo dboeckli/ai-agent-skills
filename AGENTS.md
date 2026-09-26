@@ -14,13 +14,13 @@ After changing a skill or doc, always verify: run the relevant command above and
 ## Sandbox (opencode-sandbox-kit)
 
 Run this repo inside an opencode-sandbox-kit sandbox — canonical, multiline, **no `--name`**,
-workspace mount `.`, `--no-share-skills`, `--static-mcp idea`, pinned template:
+workspace mount `.`, `--skills=off`, `--static-mcp idea`, pinned template:
 
 ```powershell
 sbx run opencode `
     --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker/sandbox-templates:opencode-docker-0.5.0 `
-    --no-share-skills `
+    --template docker.io/domboeckli/sbx-opencode-tooling:latest `
+    --skills=off `
     --static-mcp idea `
     .
 ```

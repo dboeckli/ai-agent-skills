@@ -179,8 +179,8 @@ Neue Sandbox starten (OpenCode):
 ```powershell
 sbx run opencode `
     --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker/sandbox-templates:opencode-docker-0.5.0 `
-    --no-share-skills `
+    --template docker.io/domboeckli/sbx-opencode-tooling:latest `
+    --skills=off `
     --static-mcp idea `
     .
 ```
@@ -190,8 +190,8 @@ Mit Kubernetes-Support (optional):
 ```powershell
 sbx run opencode `
     --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker/sandbox-templates:opencode-docker-0.5.0 `
-    --no-share-skills `
+    --template docker.io/domboeckli/sbx-opencode-tooling:latest `
+    --skills=off `
     --static-mcp idea `
     . `
     "$env:USERPROFILE\.kube:ro"
@@ -202,23 +202,24 @@ Claude Code (Home) und Mammouth Code:
 ```powershell
 sbx run claude `
     --kit "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker/sandbox-templates:claude-code-docker-0.5.0 `
-    --no-share-skills `
+    --template docker.io/domboeckli/sbx-claude-tooling:latest `
+    --skills=off `
     --static-mcp idea `
     .
 ```
 
 ```powershell
 sbx run "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=mammouth-agent" `
-    --no-share-skills `
+    --kit-arg imageTag=latest `
+    --skills=off `
     --static-mcp idea `
     .
 ```
 
-Kit auf eine bestehende Sandbox anwenden (startet die Sandbox neu, VM-Zustand bleibt erhalten); den Sandbox-Namen mit `sbx ls` ermitteln:
+Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
 
 ```powershell
-sbx kit add <sandbox-name> "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
+sbx kit add opencode-ai-agent-skills "git+https://github.com/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
 ```
 
 Voraussetzungen: GitHub-Secret registrieren (`sbx secret set github`); Details in der `INSTALL.md` des opencode-sandbox-kit.
