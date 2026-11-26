@@ -3,18 +3,5 @@
   "statusLine": {
     "type": "command",
     "command": "~/.claude/statusline.sh"
-  },
-  "hooks": {
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash .claude/hooks/format.sh",
-            "statusMessage": "Formatting files..."
-          }
-        ]
-      }
-    ]
   }
 }

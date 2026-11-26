@@ -10,7 +10,7 @@
 set -euo pipefail
 
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-SKILLS_DIR="$REPO_ROOT/.claude/skills"
+SKILLS_DIR="$REPO_ROOT/.agents/skills"
 REMOTE=false
 errors=0
 

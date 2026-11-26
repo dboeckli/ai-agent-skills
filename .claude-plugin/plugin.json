@@ -2,13 +2,12 @@
   "name": "ai-agent-skills",
   "displayName": "AI Agent Skills",
   "version": "1.0.0",
-  "description": "Reusable AI agent skills for Claude Code: camel-matrix, cc-best-practices, skill-best-practices, project-references",
+  "description": "Reusable AI agent skills for Claude Code: camel-matrix, cc-best-practices, cron-schedule-planner, project-references, skill-best-practices",
   "author": {
     "name": "dboeckli",
     "url": "https://github.com/dboeckli"
   },
   "repository": "https://github.com/dboeckli/ai-agent-skills",
   "license": "MIT",
-  "skills": "./.claude/skills/",
-  "hooks": "./hooks.json"
+  "skills": "./.agents/skills/"
 }

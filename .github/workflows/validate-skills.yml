@@ -25,10 +25,10 @@ jobs:
           bash "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.sh"
 
       - name: Validate SKILL.md frontmatter
-        run: bash .claude/skills/skill-best-practices/scripts/validate-skills.sh
+        run: bash .agents/skills/skill-best-practices/scripts/validate-skills.sh
 
-      - name: Validate CLAUDE.md
-        run: bash .claude/skills/cc-best-practices/scripts/validate-claude-md.sh
+      - name: Validate AGENTS.md
+        run: bash .agents/skills/skill-best-practices/scripts/validate-agents-md.sh
 
   publish:
     needs: validate

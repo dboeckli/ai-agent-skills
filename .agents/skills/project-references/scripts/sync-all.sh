@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Sync all repositories to ~/projects/referenzen/.
-# Reads from ~/claude-shared/projekte.txt if present, otherwise uses gh repo list.
+# Reads from ~/.agents/projekte.txt if present, otherwise uses gh repo list.
 # Usage: sync-all.sh [--list <file>] [--limit <n>]
 #   --list  <file>  override the default projekte.txt path
 #   --limit <n>     max repos when using gh repo list (default: 200)
@@ -8,7 +8,7 @@
 set -euo pipefail
 
 REFERENZEN_DIR="${REFERENZEN_DIR:-$HOME/projects/referenzen}"
-PROJEKTE_FILE="${PROJEKTE_FILE:-$HOME/claude-shared/projekte.txt}"
+PROJEKTE_FILE="${PROJEKTE_FILE:-$HOME/.agents/projekte.txt}"
 GH_LIMIT=200
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 

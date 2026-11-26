@@ -108,7 +108,7 @@ plus a Markdown report, without opening each workflow file.
 
 Two sources are supported — prefer the manual list when it exists:
 
-1. **Manual list** (`~/claude-shared/projekte.txt`): one GitHub repo URL or
+1. **Manual list** (`~/.agents/projekte.txt`): one GitHub repo URL or
    `owner/name` slug per line, blank lines and `#` comments ignored.
 2. **Automatic discovery**: `gh repo list --limit 200 --json nameWithOwner`
    when the file is absent or the user explicitly asks for a full sync.
@@ -136,7 +136,7 @@ Exit codes: `0` = ok, `2` = skipped (local changes), `3` = clone/pull failed.
 ### `scripts/sync-all.sh [--list <file>] [--limit <n>]`
 
 Iterates over all repositories and calls the clone-or-update logic for each.
-Prefers `~/claude-shared/projekte.txt` as source; falls back to `gh repo list`
+Prefers `~/.agents/projekte.txt` as source; falls back to `gh repo list`
 when the file is absent. Prints a summary line at the end.
 
 ```bash
@@ -144,7 +144,7 @@ when the file is absent. Prints a summary line at the end.
 bash scripts/sync-all.sh
 
 # Use a specific list file
-bash scripts/sync-all.sh --list ~/claude-shared/projekte.txt
+bash scripts/sync-all.sh --list ~/.agents/projekte.txt
 
 # Limit gh repo list to 50 repos
 bash scripts/sync-all.sh --limit 50
@@ -204,7 +204,7 @@ consult `references/search-patterns.md`.
 ls ~/projects/referenzen/
 ```
 
-If `~/claude-shared/projekte.txt` exists, show its contents alongside to
+If `~/.agents/projekte.txt` exists, show its contents alongside to
 explain which repos are tracked vs. which are locally present.
 
 ### 4. Overview of GitHub Actions triggers

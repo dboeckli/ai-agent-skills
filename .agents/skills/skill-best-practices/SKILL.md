@@ -1,6 +1,6 @@
 ---
 name: skill-best-practices
-description: "Guide for creating, structuring, and improving Claude skills (SKILL.md). Use when building a new skill, reviewing an existing skill, writing SKILL.md frontmatter, defining trigger conditions, troubleshooting skill problems (not triggering, over-triggering, instructions not followed), or planning skill distribution. When working on any skill in this repository: also load the cc-best-practices skill, and always update both CLAUDE.md and README.md skill tables after any skill change. Do NOT use for general Claude Code configuration or hook setup."
+description: "Guide for creating, structuring, and improving agent skills (SKILL.md). Use when building a new skill, reviewing an existing skill, writing SKILL.md frontmatter, defining trigger conditions, troubleshooting skill problems (not triggering, over-triggering, instructions not followed), or planning skill distribution. When working on any skill in this repository: also load the cc-best-practices skill, and always update both AGENTS.md and README.md skill tables after any skill change. Do NOT use for general agent configuration or Claude Code hook setup."
 ---
 
 ---
@@ -29,7 +29,7 @@ Define 2–3 concrete use cases before writing anything (see Planning section be
 
 ### Step 3: Write the description — this is the most critical part
 
-The description controls when Claude loads your skill. It must include:
+The description controls when the agent loads your skill. It must include:
 
 - **WHAT** the skill does
 - **WHEN** to use it (specific trigger phrases)
@@ -42,11 +42,11 @@ See "Writing effective descriptions" for good/bad examples.
 Follow the recommended template: `## Instructions` → numbered steps → `## Examples` → `## Troubleshooting`.
 Be specific and actionable. Move detailed docs to `references/` and link to them.
 
-### Step 5: Update CLAUDE.md and README.md
+### Step 5: Update AGENTS.md and README.md
 
 After creating or modifying any skill in this repository, always update the skill tables in both files:
 
-- `CLAUDE.md` — skill table under "Included Skills" (Trigger column: one-line description of when it fires)
+- `AGENTS.md` — skill table under "Included Skills" (Trigger column: one-line description of when it fires)
 - `README.md` — skill table under "Enthaltene Skills" (Beschreibung column: German one-liner)
 
 Both files must stay in sync. This step is mandatory and must not be skipped.
@@ -58,7 +58,7 @@ Also invoke the `cc-best-practices` skill when working on skills in this reposit
 Run the validation script from the repository root before testing or committing:
 
 ```bash
-bash .claude/skills/skill-best-practices/scripts/validate-skills.sh
+bash .agents/skills/skill-best-practices/scripts/validate-skills.sh
 ```
 
 Fix any `FAIL` lines before continuing. Common issues:
@@ -69,7 +69,7 @@ Fix any `FAIL` lines before continuing. Common issues:
 After pushing, also run the remote check to confirm `npx skills add --list` finds all skills:
 
 ```bash
-bash .claude/skills/skill-best-practices/scripts/validate-skills.sh --remote
+bash .agents/skills/skill-best-practices/scripts/validate-skills.sh --remote
 ```
 
 ### Step 7: Test triggering and functional behavior
@@ -110,7 +110,7 @@ Actions:
 
 1. Read the SKILL.md frontmatter — check name (kebab-case?), description (WHAT + WHEN? under 1024 chars? trigger phrases present?)
 2. Check body — is it under 5,000 words? Are instructions specific and actionable? Is there a Troubleshooting section? Examples?
-3. Simulate triggering — would the description cause Claude to load this skill for the right queries?
+3. Simulate triggering — would the description cause the agent to load this skill for the right queries?
 4. Report findings as: PASS / WARN / FAIL per criterion
 
 Result: Prioritized list of improvements with specific fixes for each issue.
@@ -123,7 +123,7 @@ Actions:
 
 1. Read the description field — is it too generic? ("Helps with projects" won't work)
 2. Check for missing trigger phrases — does it include words users would actually say?
-3. Ask Claude: "When would you use the [skill name] skill?" — Claude quotes the description back; gaps become obvious
+3. Ask the agent: "When would you use the [skill name] skill?" — it quotes the description back; gaps become obvious
 4. Rewrite description to add specific trigger phrases and retest
 
 Result: Updated description with concrete triggers; skill auto-loads on relevant queries.
@@ -143,13 +143,13 @@ A skill is a folder containing:
 
 **Progressive Disclosure** — three levels:
 
-1. YAML frontmatter: always in system prompt; tells Claude _when_ to load the skill
+1. YAML frontmatter: always in system prompt; tells the agent _when_ to load the skill
 2. SKILL.md body: loaded when relevant; full instructions
 3. Linked files in `references/`: loaded on demand
 
 **Composability** — skills work alongside others; don't assume exclusivity.
 
-**Portability** — works identically across Claude.ai, Claude Code, and API.
+**Portability** — the open SKILL.md format works across harnesses (Claude, opencode, and other agents).
 
 ---
 
@@ -229,7 +229,7 @@ metadata:
 **Security restrictions — forbidden in frontmatter:**
 
 - XML angle brackets (`< >`)
-- Names containing "claude" or "anthropic" (reserved)
+- Names containing "claude" or "anthropic" (reserved by Claude skill tooling)
 
 ---
 
@@ -346,7 +346,7 @@ Should NOT trigger:
 - "Help me write Python code"
 ```
 
-**Debugging:** Ask Claude "When would you use the [skill name] skill?" — it will quote the description back.
+**Debugging:** Ask the agent "When would you use the [skill name] skill?" — it will quote the description back.
 
 ### 2. Functional tests
 
@@ -359,7 +359,7 @@ Should NOT trigger:
 
 Compare token count, tool calls, and back-and-forth messages with vs. without the skill.
 
-**Pro tip:** Iterate on a single challenging task until Claude succeeds, then extract the winning approach into a skill.
+**Pro tip:** Iterate on a single challenging task until the agent succeeds, then extract the winning approach into a skill.
 
 ---
 
@@ -436,7 +436,7 @@ For detailed examples and implementation templates for each pattern, consult `re
 
 **Repository sync (mandatory for this repo):**
 
-- [ ] `CLAUDE.md` skill table updated
+- [ ] `AGENTS.md` skill table updated
 - [ ] `README.md` skill table updated
 - [ ] `cc-best-practices` skill was loaded during this session
 - [ ] `validate-skills.sh` run — no `FAIL` lines

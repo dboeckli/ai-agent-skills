@@ -1,8 +1,11 @@
 # Development and CI files not needed in the npm package
 .github/
 .gitignore
-CLAUDE.md
-WSL_Claude_Code_Setup.md
+AGENTS.md
+.agents/settings.local.json
+.claude/settings.local.json
+docs/wsl-dev-setup.md
+docs/claude-code-setup.md
 *.iml
 target/
 

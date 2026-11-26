@@ -44,7 +44,7 @@ cat ~/projects/referenzen/repo-name/helm-charts/values.yaml
 ls ~/projects/referenzen/
 
 # Show tracked repos from list file (if it exists)
-cat ~/claude-shared/projekte.txt
+cat ~/.agents/projekte.txt
 ```
 
 ## Citing patterns
