@@ -5,8 +5,9 @@ Thumbs.db
 # IntelliJ
 out/
 
-# Claude Code – local/machine-specific settings
+# Agent-specific local/machine settings
 .claude/settings.local.json
+.agents/settings.local.json
 
 # Build output
 /target/

@@ -4,7 +4,7 @@
   "scripts": {
     "postinstall": "bash scripts/install-skills.sh"
   },
-  "description": "Reusable AI agent skills in the SKILL.md format for Claude Code",
+  "description": "Reusable AI agent skills in the SKILL.md format for Claude Code, opencode and other agents",
   "repository": {
     "type": "git",
     "url": "https://github.com/dboeckli/ai-agent-skills.git"
@@ -12,8 +12,10 @@
   "author": "dboeckli",
   "license": "MIT",
   "keywords": [
+    "agent-skills",
     "claude",
     "claude-code",
+    "opencode",
     "skills",
     "ai-agent",
     "camel",

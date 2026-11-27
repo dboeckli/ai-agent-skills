@@ -14,7 +14,7 @@ Das Format wurde ursprünglich von Anthropic für Claude entwickelt, ist jedoch 
 
 ## KI-Agnostische Nutzbarkeit
 
-Die Skills in diesem Repository sind bewusst so gestaltet, dass sie **keine Claude-spezifischen Abhängigkeiten** enthalten. Stattdessen greifen sie ausschliesslich auf Standardwerkzeuge zurück:
+Die Skills in diesem Repository sind bewusst so gestaltet, dass sie **keine Claude-spezifischen Abhängigkeiten** enthalten — ausser bei Skills, die explizit als Claude-Code-spezifisch gekennzeichnet sind (z. B. `cc-best-practices`). Stattdessen greifen sie ausschliesslich auf Standardwerkzeuge zurück:
 
 - **git** – Versionskontrolle und Repository-Operationen
 - **gh** – GitHub CLI für Issues, PRs und Repository-Management
@@ -41,7 +41,7 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 
 | Skill                  | Beschreibung                                                                                                                                                |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cc-best-practices`    | Anleitung zur effektiven Nutzung von Claude Code: Kontextmanagement, Explore-Plan-Implement-Workflow, Prompting-Techniken und häufige Fehlermuster.         |
+| `cc-best-practices`    | Claude Code-spezifisch: Anleitung zur effektiven Nutzung von Claude Code: Kontextmanagement, Explore-Plan-Implement-Workflow, Prompting-Techniken und häufige Fehlermuster. |
 | `skill-best-practices` | Leitfaden zum Erstellen, Strukturieren und Verbessern von SKILL.md Dateien: Frontmatter, Trigger-Beschreibungen, Testen und Troubleshooting.                |
 | `project-references`   | Konventionen und Implementierungsmuster aus eigenen GitHub-Repositories nachschlagen, die lokal unter `~/projects/referenzen/` ausgecheckt sind; ausserdem eine Übersicht der GitHub-Actions-Trigger (push, PR, schedule/cron) über alle Repos als Markdown-Report erzeugen. |
 | `cron-schedule-planner` | Erstellt eine Übersicht der GitHub-Actions-Cron-Zeitpläne über mehrere Repos (via `gh` oder lokale Checkouts), klassifiziert die Job-Intensität und schlägt eine Entzerrung in wenig belegte Zeitfenster vor (Markdown-Report mit Stunden-Histogramm). |
@@ -49,11 +49,13 @@ Die SKILL.md Dateien können direkt als Kontextdatei in einen Chat hochgeladen, 
 
 ---
 
-## Installation für Claude Code
+## Installation
 
 ### Option 1: npm global — Empfohlen
 
-Installiert Skills, `statusline.sh` und den Formatter-Hook automatisch. Skills werden als Symlinks (Linux/macOS/WSL) bzw. Directory-Junctions (Windows) eingebunden — Reinstall genügt für Updates.
+Installiert die Skills nach `~/.agents/skills` (generisch für alle Agenten). Skills werden als Symlinks (Linux/macOS/WSL) bzw. Directory-Junctions (Windows) eingebunden — Reinstall genügt für Updates. Die Claude-Code-Statusline wird nur zusätzlich kopiert, wenn `~/.claude` bereits existiert.
+
+Für Claude Code stehen zusätzlich das mitgelieferte Plugin (`.claude-plugin/`) oder `npx skills add` zur Verfügung.
 
 Einmalig npm für Git-URL-Installs freischalten:
 
@@ -73,20 +75,20 @@ npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#
 Installation prüfen:
 
 ```bash
-tree ~/.claude/skills && ls ~/.claude/statusline.sh ~/.claude/settings.json
+tree ~/.agents/skills
 ```
 
 Erwartete Ausgabe:
 
 ```
-~/.claude/skills
-├── camel-matrix -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.claude/skills/camel-matrix/
-├── cc-best-practices -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.claude/skills/cc-best-practices/
-├── project-references -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.claude/skills/project-references/
-└── skill-best-practices -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.claude/skills/skill-best-practices/
+~/.agents/skills
+├── camel-matrix -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.agents/skills/camel-matrix/
+├── cc-best-practices -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.agents/skills/cc-best-practices/
+├── cron-schedule-planner -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.agents/skills/cron-schedule-planner/
+├── project-references -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.agents/skills/project-references/
+└── skill-best-practices -> ~/.nvm/.../node_modules/@dboeckli/ai-agent-skills/.agents/skills/skill-best-practices/
 
-~/.claude/statusline.sh
-~/.claude/settings.json
+~/.claude/statusline.sh   # optional, nur wenn ~/.claude existiert
 ```
 
 Aktualisieren (gleicher Befehl):
@@ -105,13 +107,13 @@ npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#
 & "$(npm root -g)/@dboeckli/ai-agent-skills/scripts/install-skills.ps1"
 ```
 
-Skills werden als Directory-Junctions eingebunden (kein Admin-Recht nötig). Ausserdem wird in `%USERPROFILE%\.claude\settings.json` ein Stop-Hook eingetragen, der nach jeder Session Dateien formatiert.
+Skills werden als Directory-Junctions nach `%USERPROFILE%\.agents\skills` eingebunden (kein Admin-Recht nötig). Die Claude-Code-Statusline wird nur kopiert, wenn `%USERPROFILE%\.claude` bereits existiert.
 
 Installation prüfen:
 
 ```powershell
-Get-ChildItem "$HOME\.claude\skills"
-Test-Path "$HOME\.claude\statusline.sh", "$HOME\.claude\settings.json"
+Get-ChildItem "$HOME\.agents\skills"
+Test-Path "$HOME\.claude\statusline.sh"   # optional, nur bei vorhandenem ~/.claude
 ```
 
 Aktualisieren (gleicher Befehl):
@@ -123,7 +125,7 @@ npm install -g --ignore-scripts https://github.com/dboeckli/ai-agent-skills.git#
 
 ### Option 2: skills CLI — Alternative
 
-Nützlich um Skills aus mehreren Repos zu kombinieren. Installiert **nicht** `statusline.sh` und den Formatter-Hook.
+Nützlich um Skills aus mehreren Repos zu kombinieren. Installiert keine Claude-Code-Statusline.
 
 ```bash
 # Global installieren
@@ -177,126 +179,12 @@ sbx settings set kit.allowedSources --% "[\"docker.io/\",\"codeberg.org/dboeckli
 Neue Sandbox starten (OpenCode):
 
 ```powershell
-sbx run opencode `
-    --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker.cloudsmith.io/dboeckli/sbx/sbx-opencode-tooling:latest `
+sbx run docker.io/domboeckli/sbx-opencode:latest `
     --skills=off `
-    --static-mcp idea `
-    .
-```
-
-Mit Kubernetes-Support (optional):
-
-```powershell
-sbx run opencode `
-    --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker.cloudsmith.io/dboeckli/sbx/sbx-opencode-tooling:latest `
-    --skills=off `
-    --static-mcp idea `
+    --static-mcp idea,k8s,docker `
     . `
-    "$env:USERPROFILE\.kube:ro"
+    "C:\development\maven-repo:ro"
 ```
-
-Claude Code (Home) und Mammouth Code:
-
-```powershell
-sbx run claude `
-    --kit "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent" `
-    --template docker.cloudsmith.io/dboeckli/sbx/sbx-claude-tooling:latest `
-    --skills=off `
-    --static-mcp idea `
-    .
-```
-
-```powershell
-sbx run "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=mammouth-agent" `
-    --kit-arg imageTag=latest `
-    --skills=off `
-    --static-mcp idea `
-    .
-```
-
-Apply the kit to an existing sandbox (restarts the sandbox, VM state is kept):
-
-```powershell
-sbx kit add opencode-ai-agent-skills "git+https://codeberg.org/dboeckli/opencode-sandbox-kit.git#dir=opencode-agent"
-```
-
-Voraussetzungen: GitHub-Secret registrieren (`sbx secret set github`); Details in der `INSTALL.md` des opencode-sandbox-kit.
-
----
-
-## Konfiguration
-
-Nach der Installation die Datei `~/.claude/settings.json` (Linux/WSL) bzw. `%USERPROFILE%\.claude\settings.json` (Windows) manuell öffnen und folgende Einstellungen ergänzen oder anpassen.
-
-### Linux / WSL (`~/.claude/settings.json`)
-
-```json
-{
-  "model": "claude-sonnet-4-6",
-  "theme": "light",
-  "permissions": {
-    "allow": ["Bash(npx ctx7@latest *)", "Bash(ctx7 *)"]
-  },
-  "skillOverrides": {
-    "skill-creator": "off"
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "/home/<username>/.claude/statusline.sh"
-  },
-  "sandbox": {
-    "enabled": true,
-    "autoAllowBashIfSandboxed": false
-  }
-}
-```
-
-`<username>` durch den eigenen Linux-Benutzernamen ersetzen (oder `~` verwenden, falls Claude Code das auflöst).
-
-### Windows (`%USERPROFILE%\.claude\settings.json`)
-
-```json
-{
-  "model": "claude-sonnet-4-6",
-  "theme": "light",
-  "permissions": {
-    "allow": ["Bash(npx ctx7@latest *)", "Bash(ctx7 *)"]
-  },
-  "skillOverrides": {
-    "skill-creator": "off"
-  },
-  "statusLine": {
-    "type": "command",
-    "command": "bash \"C:/Users/<username>/.claude/statusline.sh\""
-  },
-  "sandbox": {
-    "enabled": true,
-    "autoAllowBashIfSandboxed": false
-  }
-}
-```
-
-`<username>` durch den Windows-Benutzernamen ersetzen. Die `statusLine` ruft `bash` auf (Git Bash oder WSL), damit das `.sh`-Script ausgeführt werden kann.
-
-> **Hinweis:** Der Stop-Hook für `format.sh` wird automatisch durch `install-skills.ps1` (Windows) bzw. `install-skills.sh` (Linux/WSL) eingetragen — dieser muss nicht manuell gesetzt werden.
-
----
-
-## Nutzung mit anderen AI Systemen
-
-### Als Kontextdatei hochladen
-
-Lade die gewünschte SKILL.md Datei direkt in den Chat hoch. Das AI System kann den Inhalt als Kontext für die Aufgabenbearbeitung nutzen.
-
-### In Systemprompt einfügen
-
-Kopiere den Inhalt einer SKILL.md Datei (oder ausgewählte Abschnitte) in den Systemprompt deines AI Systems, um die definierten Anweisungen und Werkzeuge zu aktivieren.
-
-### Einbindung in Custom-GPTs oder Agenten-Frameworks
-
-Verweise in deiner Konfiguration auf die SKILL.md Datei(en) aus diesem Repository. Die strukturierten Metadaten und Anweisungen können von den meisten modernen Agenten-Frameworks direkt interpretiert werden.
 
 ---
 
