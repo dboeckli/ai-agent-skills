@@ -66,7 +66,7 @@ Fix any `FAIL` lines before continuing. Common issues:
 - `description` uses block scalar (`>` or `|`) → replace with a quoted single-line string
 - Sub-keys under a parent mapping key not indented → add two-space indent
 
-After pushing, also run the remote check to confirm `npx skills add --list` finds all skills:
+After pushing, also run the remote check to confirm `skills add --list` finds all skills. It requires the installed `skills` CLI; the script never runs unpinned `npx`:
 
 ```bash
 bash .agents/skills/skill-best-practices/scripts/validate-skills.sh --remote

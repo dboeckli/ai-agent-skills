@@ -50,8 +50,6 @@ PULLED=0
 SKIPPED=0
 FAILED=0
 
-inc() { eval "$1=\$(( \${$1} + 1 ))"; }
-
 while IFS= read -r REPO; do
 	[[ -z "$REPO" ]] && continue
 
@@ -63,24 +61,24 @@ while IFS= read -r REPO; do
 		if [[ -n "$STATUS" ]]; then
 			echo "SKIP  $REPO — local changes present:"
 			git -C "$TARGET" status --short | sed 's/^/      /'
-			inc SKIPPED
+			SKIPPED=$((SKIPPED + 1))
 		else
 			echo "PULL  $REPO"
 			if git -C "$TARGET" pull --ff-only 2>&1 | sed 's/^/      /'; then
-				inc PULLED
+				PULLED=$((PULLED + 1))
 			else
 				echo "      FAILED" >&2
-				inc FAILED
+				FAILED=$((FAILED + 1))
 			fi
 		fi
 	else
 		echo "CLONE $REPO → $TARGET"
 		if gh repo clone "$REPO" "$TARGET" -- --quiet 2>&1 | sed 's/^/      /'; then
 			echo "      OK"
-			inc CLONED
+			CLONED=$((CLONED + 1))
 		else
 			echo "      FAILED" >&2
-			inc FAILED
+			FAILED=$((FAILED + 1))
 		fi
 	fi
 done <<<"$REPOS"
